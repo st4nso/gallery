@@ -1,0 +1,19 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import '../styles/global.css';
+const { title = 'STANSO', description = 'Fotografia, direção de arte e imagem.', active = '' } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f2f2ee" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <SiteHeader active={active} />
+    <slot />
+  </body>
+</html>

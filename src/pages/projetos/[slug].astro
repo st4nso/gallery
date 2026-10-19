@@ -1,0 +1,5345 @@
+---
+import { projects } from '../../data/projects';
+import { scrollContent } from '../../data/scroll';
+
+
+export function getStaticPaths() {
+
+  return projects.map(
+    (project) => ({
+
+      params: {
+        slug: project.slug
+      },
+
+      props: {
+        project
+      }
+
+    })
+  );
+
+}
+
+
+const { project } = Astro.props;
+
+
+const isScroll =
+  project.slug === 'scroll';
+
+
+const isScrollEditorial =
+  !isScroll &&
+  project.relation === 'scroll';
+
+
+const currentIndex =
+  projects.findIndex(
+    (item) =>
+      item.slug === project.slug
+  );
+
+
+const nextProject =
+  projects[
+    (currentIndex + 1) %
+    projects.length
+  ];
+
+
+const findProject =
+  (slug: string) =>
+    projects.find(
+      (item) =>
+        item.slug === slug
+    );
+
+
+/*
+=========================================================
+EDITORIAIS DE SCROLL
+=========================================================
+*/
+
+
+const scrollEditorialOrder = [
+  'nomofobia',
+  'plt',
+  'feed',
+  'irl'
+];
+
+
+const currentEditorialIndex =
+  scrollEditorialOrder.indexOf(
+    project.slug
+  );
+
+
+const nextEditorialSlug =
+  currentEditorialIndex >= 0
+    ? scrollEditorialOrder[
+        (
+          currentEditorialIndex + 1
+        )
+        %
+        scrollEditorialOrder.length
+      ]
+    : undefined;
+
+
+const editorialNext =
+  nextEditorialSlug
+    ? findProject(
+        nextEditorialSlug
+      )
+    : undefined;
+
+
+const scrollEditorials =
+  scrollContent
+    .editorials
+    .items
+    .map(
+      (item) => ({
+
+        ...item,
+
+        project:
+          findProject(
+            item.slug
+          )
+
+      })
+    );
+
+
+/*
+=========================================================
+GALERIA
+=========================================================
+*/
+
+
+const defaultEditorialLayout = [
+  'full',
+  'medium-left',
+  'medium-right',
+  'wide',
+  'small-right',
+  'pair-left',
+  'pair-right',
+  'full'
+];
+
+
+const getGalleryLayout =
+  (index: number) => {
+
+    if (
+      project.galleryLayout &&
+      project.galleryLayout[index]
+    ) {
+
+      return (
+        project.galleryLayout[index]
+      );
+
+    }
+
+
+    return (
+      defaultEditorialLayout[
+        index %
+        defaultEditorialLayout.length
+      ]
+    );
+
+  };
+
+
+const editorialIntro =
+  project.editorialIntro ||
+  project.description;
+
+
+/*
+=========================================================
+TÍTULO
+=========================================================
+*/
+
+
+const titleLength =
+  project.title
+    .replace(
+      /\s+/g,
+      ''
+    )
+    .length;
+
+
+const titleSizeClass =
+  titleLength <= 5
+    ? 'title-short'
+    : titleLength <= 9
+      ? 'title-medium'
+      : titleLength <= 12
+        ? 'title-long'
+        : 'title-xlong';
+
+
+/*
+=========================================================
+HERO DE PROJETOS NORMAIS
+=========================================================
+*/
+
+
+const normalHero =
+  project.randomHero
+  &&
+  project.gallery?.length
+
+    ? project.gallery[0]
+
+    : project.hero;
+
+
+const randomGalleryData =
+  project.randomHero
+
+    ? JSON.stringify(
+        project.gallery
+      )
+
+    : '';
+---
+
+<!doctype html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <title>
+    {project.title} — STANSO
+  </title>
+
+
+  <style>
+
+    :root {
+
+      --bg:
+        #f2f2ee;
+
+      --ink:
+        #11110f;
+
+      --muted:
+        #7d7d77;
+
+      --line:
+        rgba(
+          17,
+          17,
+          15,
+          .16
+        );
+
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    }
+
+
+    * {
+      box-sizing:
+        border-box;
+    }
+
+
+    html {
+
+      margin:
+        0;
+
+      padding:
+        0;
+
+      width:
+        100%;
+
+      scroll-behavior:
+        smooth;
+
+      -webkit-text-size-adjust:
+        100%;
+
+      text-size-adjust:
+        100%;
+
+    }
+
+
+    body {
+
+      margin:
+        0;
+
+      width:
+        100%;
+
+      min-width:
+        0;
+
+      overflow-x:
+        clip;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--bg);
+
+    }
+
+
+    body.lightbox-open {
+      overflow:
+        hidden;
+    }
+
+
+    img,
+    video {
+
+      display:
+        block;
+
+      max-width:
+        100%;
+
+    }
+
+
+    a {
+      color:
+        inherit;
+    }
+
+
+    button {
+      font:
+        inherit;
+    }
+
+
+
+    /*
+    ========================================================
+    HEADER
+    ========================================================
+    */
+
+
+    .header {
+
+      position:
+        sticky;
+
+      top:
+        0;
+
+      z-index:
+        1000;
+
+      height:
+        64px;
+
+      padding:
+        0
+        28px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      background:
+        rgba(
+          242,
+          242,
+          238,
+          .94
+        );
+
+      backdrop-filter:
+        blur(
+          10px
+        );
+
+      -webkit-backdrop-filter:
+        blur(
+          10px
+        );
+
+      border-bottom:
+        1px
+        solid
+        rgba(
+          17,
+          17,
+          15,
+          .08
+        );
+
+    }
+
+
+    .header a {
+
+      min-height:
+        44px;
+
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      text-decoration:
+        none;
+
+      font-size:
+        11px;
+
+      -webkit-tap-highlight-color:
+        transparent;
+
+    }
+
+
+    .brand {
+      font-weight:
+        630;
+    }
+
+
+    .back {
+      color:
+        #73736d;
+    }
+
+
+
+    /*
+    ========================================================
+    TÍTULOS
+    ========================================================
+    */
+
+
+    .project-title,
+    .editorial-project-title {
+
+      display:
+        block;
+
+      width:
+        max-content;
+
+      max-width:
+        100%;
+
+      margin:
+        0;
+
+      white-space:
+        nowrap;
+
+      word-break:
+        keep-all;
+
+      overflow-wrap:
+        normal;
+
+      hyphens:
+        none;
+
+      line-height:
+        .82;
+
+      font-weight:
+        590;
+
+      letter-spacing:
+        -.065em;
+
+    }
+
+
+    .title-short {
+
+      font-size:
+        clamp(
+          54px,
+          6vw,
+          110px
+        );
+
+    }
+
+
+    .title-medium {
+
+      font-size:
+        clamp(
+          48px,
+          4vw,
+          76px
+        );
+
+    }
+
+
+    .title-long {
+
+      font-size:
+        clamp(
+          38px,
+          3.25vw,
+          62px
+        );
+
+    }
+
+
+    .title-xlong {
+
+      font-size:
+        clamp(
+          28px,
+          2.4vw,
+          46px
+        );
+
+    }
+
+
+
+    /*
+    ========================================================
+    PROJETOS NORMAIS
+    ========================================================
+    */
+
+
+    .project-shell {
+
+      width:
+        min(
+          1540px,
+          calc(
+            100% - 56px
+          )
+        );
+
+      margin:
+        0 auto;
+
+    }
+
+
+    .project-hero {
+
+      min-height:
+        calc(
+          100vh - 64px
+        );
+
+      display:
+        grid;
+
+      grid-template-columns:
+        minmax(
+          0,
+          1.65fr
+        )
+        minmax(
+          390px,
+          .8fr
+        );
+
+      gap:
+        clamp(
+          40px,
+          5vw,
+          90px
+        );
+
+      padding:
+        40px
+        0
+        70px;
+
+    }
+
+
+    .hero-media {
+
+      min-width:
+        0;
+
+      height:
+        calc(
+          100vh - 145px
+        );
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+    }
+
+
+    .hero-media
+    .lightbox-trigger {
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+    }
+
+
+    .hero-media img {
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      object-fit:
+        contain;
+
+      background:
+        transparent;
+
+    }
+
+
+    .hero-info {
+
+      min-width:
+        0;
+
+      align-self:
+        end;
+
+    }
+
+
+    .meta {
+
+      margin-top:
+        22px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        10px;
+
+      line-height:
+        1.4;
+
+    }
+
+
+    .description {
+
+      max-width:
+        470px;
+
+      margin:
+        38px
+        0
+        0;
+
+      font-size:
+        17px;
+
+      line-height:
+        1.45;
+
+    }
+
+
+    .credits {
+
+      padding:
+        25px
+        0
+        105px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        26px
+        35px;
+
+    }
+
+
+    .credit-label {
+
+      margin-bottom:
+        5px;
+
+      color:
+        #898983;
+
+      font-size:
+        9px;
+
+    }
+
+
+    .credit-value {
+
+      font-size:
+        11px;
+
+      line-height:
+        1.3;
+
+      overflow-wrap:
+        anywhere;
+
+    }
+
+
+
+    /*
+    ========================================================
+    GALERIA NORMAL
+    ========================================================
+    */
+
+
+    .gallery {
+
+      width:
+        min(
+          1540px,
+          calc(
+            100% - 56px
+          )
+        );
+
+      margin:
+        0
+        auto
+        135px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          12,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        70px
+        22px;
+
+    }
+
+
+    .photo {
+
+      min-width:
+        0;
+
+      margin:
+        0;
+
+      grid-column:
+        span 7;
+
+    }
+
+
+    .photo:nth-child(
+      3n + 2
+    ) {
+
+      grid-column:
+        6 /
+        span 7;
+
+    }
+
+
+    .photo:nth-child(
+      5n + 3
+    ) {
+
+      grid-column:
+        2 /
+        span 5;
+
+    }
+
+
+    .photo img {
+
+      width:
+        100%;
+
+      height:
+        auto;
+
+      background:
+        transparent;
+
+    }
+
+
+    .photo[hidden] {
+
+      display:
+        none
+        !important;
+
+    }
+
+
+
+    /*
+    ========================================================
+    PRÓXIMO
+    ========================================================
+    */
+
+
+    .next {
+
+      width:
+        calc(
+          100% - 56px
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        45px
+        0
+        75px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      gap:
+        20px;
+
+      text-decoration:
+        none;
+
+    }
+
+
+    .next span {
+
+      color:
+        var(--muted);
+
+      font-size:
+        9px;
+
+    }
+
+
+    .next strong {
+
+      font-size:
+        14px;
+
+      font-weight:
+        580;
+
+      white-space:
+        nowrap;
+
+    }
+
+
+
+    /*
+    ========================================================
+    EDITORIAL INDIVIDUAL
+    ========================================================
+    */
+
+
+    .editorial-project {
+
+      padding-bottom:
+        0;
+
+    }
+
+
+    .editorial-project-hero {
+
+      width:
+        min(
+          1740px,
+          calc(
+            100% - 56px
+          )
+        );
+
+      min-height:
+        calc(
+          100vh - 64px
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        40px
+        0
+        90px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        minmax(
+          0,
+          1.5fr
+        )
+        minmax(
+          470px,
+          .85fr
+        );
+
+      gap:
+        clamp(
+          55px,
+          6vw,
+          110px
+        );
+
+      align-items:
+        end;
+
+    }
+
+
+    .editorial-project-image {
+
+      min-width:
+        0;
+
+      height:
+        calc(
+          100vh - 145px
+        );
+
+    }
+
+
+    .editorial-project-image
+    .lightbox-trigger {
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+    }
+
+
+    .editorial-project-image img {
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      object-fit:
+        contain;
+
+      object-position:
+        left bottom;
+
+      background:
+        transparent;
+
+    }
+
+
+    .editorial-project-info {
+
+      min-width:
+        0;
+
+      align-self:
+        end;
+
+      padding-bottom:
+        5px;
+
+    }
+
+
+    .editorial-project--nomofobia
+    .editorial-project-title {
+
+      font-size:
+        clamp(
+          50px,
+          3.9vw,
+          74px
+        );
+
+    }
+
+
+    .editorial-project-meta {
+
+      margin-top:
+        28px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        9px;
+
+      line-height:
+        1.55;
+
+    }
+
+
+    .editorial-project-description {
+
+      max-width:
+        485px;
+
+      margin:
+        45px
+        0
+        0;
+
+      font-size:
+        clamp(
+          15px,
+          1.08vw,
+          18px
+        );
+
+      line-height:
+        1.48;
+
+      letter-spacing:
+        -.012em;
+
+    }
+
+
+    .editorial-parent-link {
+
+      display:
+        inline-block;
+
+      margin-top:
+        26px;
+
+      padding-bottom:
+        3px;
+
+      color:
+        var(--muted);
+
+      text-decoration:
+        none;
+
+      border-bottom:
+        1px
+        solid
+        rgba(
+          17,
+          17,
+          15,
+          .28
+        );
+
+      font-size:
+        9px;
+
+    }
+
+
+
+    /*
+    ========================================================
+    GALERIA EDITORIAL
+    ========================================================
+    */
+
+
+    .editorial-gallery {
+
+      width:
+        min(
+          1740px,
+          calc(
+            100% - 56px
+          )
+        );
+
+      margin:
+        70px
+        auto
+        190px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          12,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      grid-auto-flow:
+        row dense;
+
+      column-gap:
+        clamp(
+          16px,
+          1.7vw,
+          28px
+        );
+
+      row-gap:
+        clamp(
+          90px,
+          10vw,
+          175px
+        );
+
+      align-items:
+        start;
+
+    }
+
+
+    .editorial-photo {
+
+      min-width:
+        0;
+
+      margin:
+        0;
+
+    }
+
+
+    .editorial-photo img {
+
+      width:
+        100%;
+
+      height:
+        auto;
+
+      max-height:
+        94vh;
+
+      object-fit:
+        contain;
+
+      background:
+        transparent;
+
+    }
+
+
+    .editorial-photo--full {
+
+      grid-column:
+        1 / -1;
+
+    }
+
+
+    .editorial-photo--full
+    img {
+
+      max-height:
+        none;
+
+    }
+
+
+    .editorial-photo--wide {
+
+      grid-column:
+        2 /
+        span 10;
+
+    }
+
+
+    .editorial-photo--medium-left {
+
+      grid-column:
+        1 /
+        span 7;
+
+    }
+
+
+    .editorial-photo--medium-right {
+
+      grid-column:
+        6 /
+        span 7;
+
+    }
+
+
+    .editorial-photo--small-left {
+
+      grid-column:
+        2 /
+        span 5;
+
+    }
+
+
+    .editorial-photo--small-right {
+
+      grid-column:
+        8 /
+        span 5;
+
+    }
+
+
+    .editorial-photo--pair-left {
+
+      grid-column:
+        1 /
+        span 6;
+
+    }
+
+
+    .editorial-photo--pair-right {
+
+      grid-column:
+        7 /
+        span 6;
+
+    }
+
+
+    .editorial-project--nomofobia
+    .editorial-gallery {
+
+      row-gap:
+        clamp(
+          105px,
+          11vw,
+          200px
+        );
+
+    }
+
+
+
+    /*
+    ========================================================
+    CRÉDITOS
+    ========================================================
+    */
+
+
+    .editorial-credits {
+
+      width:
+        min(
+          1540px,
+          calc(
+            100% - 56px
+          )
+        );
+
+      margin:
+        0
+        auto
+        110px;
+
+    }
+
+
+    .editorial-credit-label {
+
+      padding-top:
+        11px;
+
+      margin-bottom:
+        45px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+      color:
+        var(--muted);
+
+      font-size:
+        9px;
+
+    }
+
+
+    .editorial-credit-grid {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        42px
+        32px;
+
+    }
+
+
+
+    /*
+    ========================================================
+    RODAPÉ EDITORIAIS
+    ========================================================
+    */
+
+
+    .editorial-project-footer {
+
+      width:
+        min(
+          1540px,
+          calc(
+            100% - 56px
+          )
+        );
+
+      margin:
+        0 auto;
+
+      padding-bottom:
+        70px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+    }
+
+
+    .sequence-link {
+
+      min-height:
+        122px;
+
+      padding:
+        24px
+        0;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        180px
+        minmax(
+          260px,
+          1fr
+        )
+        minmax(
+          260px,
+          .8fr
+        )
+        28px;
+
+      column-gap:
+        30px;
+
+      align-items:
+        center;
+
+      border-bottom:
+        1px
+        solid
+        var(--line);
+
+      color:
+        var(--ink);
+
+      text-decoration:
+        none;
+
+    }
+
+
+    .sequence-label {
+
+      color:
+        var(--muted);
+
+      font-size:
+        9px;
+
+      line-height:
+        1.2;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .sequence-title {
+
+      margin:
+        0;
+
+      font-size:
+        clamp(
+          22px,
+          1.65vw,
+          29px
+        );
+
+      line-height:
+        1;
+
+      font-weight:
+        510;
+
+      letter-spacing:
+        -.035em;
+
+      white-space:
+        nowrap;
+
+    }
+
+
+    .sequence-meta {
+
+      justify-self:
+        end;
+
+      max-width:
+        360px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        9px;
+
+      line-height:
+        1.4;
+
+      text-align:
+        right;
+
+    }
+
+
+    .sequence-arrow {
+
+      justify-self:
+        end;
+
+      color:
+        var(--muted);
+
+      font-size:
+        17px;
+
+      line-height:
+        1;
+
+    }
+
+
+
+    /*
+    ========================================================
+    SCROLL
+    ========================================================
+    */
+
+
+    .scroll-hero {
+
+      min-height:
+        calc(
+          100vh - 64px
+        );
+
+      padding:
+        6vh
+        28px
+        38px;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      justify-content:
+        space-between;
+
+    }
+
+
+    .scroll-main-title {
+
+      margin:
+        0;
+
+      font-size:
+        clamp(
+          120px,
+          21vw,
+          350px
+        );
+
+      line-height:
+        .67;
+
+      font-weight:
+        610;
+
+      letter-spacing:
+        -.09em;
+
+      white-space:
+        nowrap;
+
+      transform:
+        translateX(
+          -1vw
+        );
+
+    }
+
+
+    .scroll-bottom {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        1fr
+        1fr;
+
+      gap:
+        35px;
+
+      max-width:
+        1280px;
+
+    }
+
+
+    .scroll-subtitle {
+
+      font-size:
+        25px;
+
+      line-height:
+        1.05;
+
+      letter-spacing:
+        -.035em;
+
+    }
+
+
+    .scroll-opening {
+
+      max-width:
+        620px;
+
+      white-space:
+        pre-line;
+
+      font-size:
+        14px;
+
+      line-height:
+        1.5;
+
+    }
+
+
+    .scroll-nav {
+
+      position:
+        sticky;
+
+      top:
+        64px;
+
+      z-index:
+        900;
+
+      display:
+        flex;
+
+      gap:
+        24px;
+
+      padding:
+        11px
+        28px;
+
+      overflow-x:
+        auto;
+
+      overflow-y:
+        hidden;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+      border-bottom:
+        1px
+        solid
+        var(--line);
+
+      background:
+        rgba(
+          242,
+          242,
+          238,
+          .95
+        );
+
+      backdrop-filter:
+        blur(
+          10px
+        );
+
+      -webkit-backdrop-filter:
+        blur(
+          10px
+        );
+
+      scrollbar-width:
+        none;
+
+    }
+
+
+    .scroll-nav::-webkit-scrollbar {
+
+      display:
+        none;
+
+    }
+
+
+    .scroll-nav a {
+
+      flex:
+        0
+        0
+        auto;
+
+      min-height:
+        28px;
+
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      color:
+        #70706a;
+
+      text-decoration:
+        none;
+
+      font-size:
+        9px;
+
+      white-space:
+        nowrap;
+
+    }
+
+
+    .scroll-section {
+
+      padding:
+        125px
+        28px;
+
+    }
+
+
+    .section-head {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        150px
+        1fr;
+
+      gap:
+        20px;
+
+      padding-top:
+        13px;
+
+      margin-bottom:
+        110px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+    }
+
+
+    .section-number {
+
+      color:
+        #8c8c86;
+
+      font-size:
+        10px;
+
+    }
+
+
+    .section-title {
+
+      margin:
+        0;
+
+      font-size:
+        clamp(
+          55px,
+          8vw,
+          130px
+        );
+
+      line-height:
+        .78;
+
+      font-weight:
+        580;
+
+      letter-spacing:
+        -.065em;
+
+      white-space:
+        nowrap;
+
+    }
+
+
+    .big-intro {
+
+      width:
+        min(
+          760px,
+          100%
+        );
+
+      margin:
+        0
+        0
+        140px
+        auto;
+
+      white-space:
+        pre-line;
+
+      font-size:
+        20px;
+
+      line-height:
+        1.38;
+
+      letter-spacing:
+        -.025em;
+
+    }
+
+
+    .chapters {
+
+      max-width:
+        1530px;
+
+      margin:
+        0 auto;
+
+    }
+
+
+    .chapter {
+
+      min-height:
+        52vh;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        90px
+        minmax(
+          250px,
+          .85fr
+        )
+        minmax(
+          300px,
+          1fr
+        );
+
+      gap:
+        40px;
+
+      padding:
+        40px
+        0
+        110px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+    }
+
+
+    .chapter-number {
+
+      color:
+        #888882;
+
+      font-size:
+        10px;
+
+    }
+
+
+    .chapter h3 {
+
+      margin:
+        0;
+
+      font-size:
+        clamp(
+          30px,
+          3.4vw,
+          58px
+        );
+
+      line-height:
+        .97;
+
+      font-weight:
+        560;
+
+      letter-spacing:
+        -.045em;
+
+    }
+
+
+    .chapter p {
+
+      max-width:
+        590px;
+
+      margin:
+        0;
+
+      white-space:
+        pre-line;
+
+      font-size:
+        15px;
+
+      line-height:
+        1.52;
+
+    }
+
+
+    .statement {
+
+      width:
+        min(
+          1000px,
+          90%
+        );
+
+      margin:
+        80px
+        auto
+        0;
+
+      font-size:
+        clamp(
+          36px,
+          4.5vw,
+          74px
+        );
+
+      line-height:
+        .96;
+
+      font-weight:
+        520;
+
+      letter-spacing:
+        -.055em;
+
+    }
+
+
+
+    /*
+    ========================================================
+    EDITORIAIS DENTRO DE SCROLL
+    ========================================================
+    */
+
+
+    .editorials {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        130px
+        26px;
+
+    }
+
+
+    .editorial-card {
+
+      min-width:
+        0;
+
+    }
+
+
+    .editorial-card:nth-child(
+      even
+    ) {
+
+      margin-top:
+        180px;
+
+    }
+
+
+    .editorial-preview img {
+
+      width:
+        100%;
+
+      height:
+        68vh;
+
+      object-fit:
+        cover;
+
+    }
+
+
+    .editorial-copy {
+
+      margin-top:
+        12px;
+
+    }
+
+
+    .editorial-top {
+
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      gap:
+        18px;
+
+    }
+
+
+    .editorial-title {
+
+      font-size:
+        13px;
+
+      font-weight:
+        580;
+
+    }
+
+
+    .editorial-open {
+
+      color:
+        var(--muted);
+
+      text-decoration:
+        none;
+
+      font-size:
+        9px;
+
+    }
+
+
+    .editorial-text {
+
+      max-width:
+        500px;
+
+      margin:
+        13px
+        0
+        0;
+
+      white-space:
+        pre-line;
+
+      color:
+        #63635e;
+
+      font-size:
+        11px;
+
+      line-height:
+        1.45;
+
+    }
+
+
+
+    /*
+    ========================================================
+    PROCESSO / PUBLICAÇÃO
+    ========================================================
+    */
+
+
+    .media-flow {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          12,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        80px
+        22px;
+
+    }
+
+
+    .media-item {
+
+      min-width:
+        0;
+
+      margin:
+        0;
+
+      grid-column:
+        span 7;
+
+    }
+
+
+    .media-item:nth-child(
+      4n + 2
+    ) {
+
+      grid-column:
+        7 /
+        span 6;
+
+      margin-top:
+        80px;
+
+    }
+
+
+    .media-item:nth-child(
+      4n + 3
+    ) {
+
+      grid-column:
+        2 /
+        span 5;
+
+    }
+
+
+    .media-item:nth-child(
+      4n + 4
+    ) {
+
+      grid-column:
+        6 /
+        span 7;
+
+    }
+
+
+    .media-item img,
+    .physical-card img {
+
+      width:
+        100%;
+
+      height:
+        auto;
+
+    }
+
+
+    .media-item video {
+
+      width:
+        100%;
+
+      height:
+        auto;
+
+      max-height:
+        85vh;
+
+      object-fit:
+        contain;
+
+      background:
+        #111;
+
+    }
+
+
+    .media-label {
+
+      margin-bottom:
+        8px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        9px;
+
+    }
+
+
+    .physical-object {
+
+      margin:
+        0
+        0
+        180px;
+
+    }
+
+
+    .physical-specs-line {
+
+      margin-bottom:
+        34px;
+
+      padding-top:
+        12px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+      color:
+        var(--muted);
+
+      font-size:
+        9px;
+
+    }
+
+
+    .physical-grid {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          12,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        24px;
+
+    }
+
+
+    .physical-card {
+
+      margin:
+        0;
+
+    }
+
+
+    .physical-card--closed {
+
+      grid-column:
+        1 /
+        span 5;
+
+    }
+
+
+    .physical-card--open {
+
+      grid-column:
+        7 /
+        span 6;
+
+    }
+
+
+    .physical-card--detail {
+
+      grid-column:
+        2 /
+        span 4;
+
+      margin-top:
+        40px;
+
+    }
+
+
+    .publication-pages {
+
+      padding-top:
+        110px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+    }
+
+
+
+    /*
+    ========================================================
+    CRÉDITOS SCROLL
+    ========================================================
+    */
+
+
+    .scroll-credit-grid {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        45px
+        30px;
+
+      padding:
+        25px
+        0
+        100px;
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+    }
+
+
+    .scroll-credit-editorials {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      border-top:
+        1px
+        solid
+        var(--line);
+
+    }
+
+
+    .credit-project-link {
+
+      padding:
+        20px
+        15px
+        60px
+        0;
+
+      text-decoration:
+        none;
+
+    }
+
+
+
+    /*
+    ========================================================
+    LIGHTBOX
+    ========================================================
+    */
+
+
+    .lightbox-trigger {
+
+      position:
+        relative;
+
+      display:
+        block;
+
+      width:
+        100%;
+
+      margin:
+        0;
+
+      padding:
+        0;
+
+      border:
+        0;
+
+      outline:
+        0;
+
+      background:
+        transparent;
+
+      /*
+      Antes era zoom-in.
+      Agora não existe mais o ícone de lupa.
+      */
+
+      cursor:
+        pointer;
+
+      text-align:
+        left;
+
+      touch-action:
+        manipulation;
+
+      -webkit-tap-highlight-color:
+        transparent;
+
+    }
+
+
+    /*
+    A imagem não captura o clique.
+    O botão recebe sempre a interação.
+    */
+
+    .lightbox-trigger img {
+
+      pointer-events:
+        none;
+
+    }
+
+
+    .lightbox {
+
+      position:
+        fixed;
+
+      inset:
+        0;
+
+      z-index:
+        5000;
+
+      display:
+        none;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      padding:
+        30px;
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          .94
+        );
+
+      touch-action:
+        none;
+
+    }
+
+
+    .lightbox.is-open {
+
+      display:
+        flex;
+
+    }
+
+
+    .lightbox-stage {
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      pointer-events:
+        auto;
+
+    }
+
+
+    .lightbox-image {
+
+      width:
+        auto;
+
+      height:
+        auto;
+
+      max-width:
+        calc(
+          100vw - 120px
+        );
+
+      max-height:
+        92vh;
+
+      object-fit:
+        contain;
+
+      user-select:
+        none;
+
+    }
+
+
+    .lightbox-close {
+
+      position:
+        fixed;
+
+      top:
+        14px;
+
+      right:
+        18px;
+
+      z-index:
+        5100;
+
+      width:
+        48px;
+
+      height:
+        48px;
+
+      border:
+        0;
+
+      background:
+        transparent;
+
+      color:
+        white;
+
+      cursor:
+        pointer;
+
+      font-size:
+        34px;
+
+    }
+
+
+    .lightbox-nav {
+
+      position:
+        fixed;
+
+      top:
+        50%;
+
+      z-index:
+        5100;
+
+      width:
+        60px;
+
+      height:
+        88px;
+
+      padding:
+        0;
+
+      border:
+        0;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      background:
+        transparent;
+
+      color:
+        white;
+
+      cursor:
+        pointer;
+
+      font-size:
+        34px;
+
+      opacity:
+        .8;
+
+      transform:
+        translateY(
+          -50%
+        );
+
+    }
+
+
+    .lightbox-nav--prev {
+
+      left:
+        8px;
+
+    }
+
+
+    .lightbox-nav--next {
+
+      right:
+        8px;
+
+    }
+
+
+    .lightbox-nav[hidden] {
+
+      display:
+        none;
+
+    }
+
+
+
+    /*
+    ========================================================
+    MOBILE
+    ========================================================
+    */
+
+
+    @media (
+      max-width:
+      760px
+    ) {
+
+
+      .header {
+
+        height:
+          56px;
+
+        padding:
+          0
+          16px;
+
+      }
+
+
+      .project-title,
+      .editorial-project-title {
+
+        width:
+          auto;
+
+        white-space:
+          normal;
+
+        line-height:
+          .88;
+
+      }
+
+
+      .title-short {
+
+        font-size:
+          clamp(
+            46px,
+            14vw,
+            70px
+          );
+
+      }
+
+
+      .title-medium {
+
+        font-size:
+          clamp(
+            38px,
+            11vw,
+            54px
+          );
+
+      }
+
+
+      .title-long {
+
+        font-size:
+          clamp(
+            31px,
+            8.7vw,
+            43px
+          );
+
+      }
+
+
+      .title-xlong {
+
+        font-size:
+          clamp(
+            25px,
+            7vw,
+            35px
+          );
+
+      }
+
+
+      .project-shell,
+      .gallery,
+      .next,
+      .editorial-project-hero,
+      .editorial-gallery,
+      .editorial-credits,
+      .editorial-project-footer {
+
+        width:
+          calc(
+            100% - 32px
+          );
+
+      }
+
+
+      .project-hero,
+      .editorial-project-hero {
+
+        min-height:
+          auto;
+
+        display:
+          flex;
+
+        flex-direction:
+          column;
+
+        gap:
+          44px;
+
+        padding:
+          22px
+          0
+          84px;
+
+      }
+
+
+      .hero-media,
+      .editorial-project-image {
+
+        width:
+          100%;
+
+        height:
+          auto;
+
+      }
+
+
+      .hero-media img,
+      .editorial-project-image img {
+
+        width:
+          100%;
+
+        height:
+          auto;
+
+        max-height:
+          74svh;
+
+        object-fit:
+          contain;
+
+        object-position:
+          center;
+
+      }
+
+
+      .description,
+      .editorial-project-description {
+
+        max-width:
+          100%;
+
+        font-size:
+          16px;
+
+      }
+
+
+      .credits,
+      .editorial-credit-grid {
+
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(
+              0,
+              1fr
+            )
+          );
+
+      }
+
+
+      .gallery,
+      .editorial-gallery {
+
+        display:
+          block;
+
+      }
+
+
+      .photo,
+      .editorial-photo {
+
+        width:
+          100%;
+
+        margin:
+          0
+          0
+          70px;
+
+      }
+
+
+      .scroll-hero {
+
+        min-height:
+          82svh;
+
+        padding:
+          42px
+          16px
+          34px;
+
+      }
+
+
+      .scroll-main-title {
+
+        font-size:
+          min(
+            28vw,
+            132px
+          );
+
+      }
+
+
+      .scroll-bottom {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
+      .scroll-section {
+
+        padding:
+          88px
+          16px;
+
+      }
+
+
+      .section-head {
+
+        grid-template-columns:
+          48px
+          minmax(
+            0,
+            1fr
+          );
+
+      }
+
+
+      .section-title {
+
+        font-size:
+          clamp(
+            41px,
+            13.5vw,
+            72px
+          );
+
+        white-space:
+          normal;
+
+      }
+
+
+      .chapter {
+
+        min-height:
+          auto;
+
+        grid-template-columns:
+          36px
+          minmax(
+            0,
+            1fr
+          );
+
+      }
+
+
+      .chapter p {
+
+        grid-column:
+          2;
+
+      }
+
+
+      .editorials {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
+      .editorial-card:nth-child(
+        even
+      ) {
+
+        width:
+          83%;
+
+        margin-left:
+          auto;
+
+        margin-top:
+          0;
+
+      }
+
+
+      .editorial-preview img {
+
+        height:
+          auto;
+
+      }
+
+
+      .media-flow {
+
+        display:
+          block;
+
+      }
+
+
+      .media-item {
+
+        width:
+          92%;
+
+        margin:
+          0
+          0
+          62px;
+
+      }
+
+
+      .physical-grid {
+
+        display:
+          flex;
+
+        flex-direction:
+          column;
+
+      }
+
+
+      .lightbox {
+
+        padding:
+          8px;
+
+      }
+
+
+      .lightbox-image {
+
+        max-width:
+          calc(
+            100vw - 56px
+          );
+
+        max-height:
+          84svh;
+
+      }
+
+
+      .lightbox-nav {
+
+        width:
+          50px;
+
+        height:
+          82px;
+
+        font-size:
+          28px;
+
+      }
+
+
+      .lightbox-nav--prev {
+
+        left:
+          0;
+
+      }
+
+
+      .lightbox-nav--next {
+
+        right:
+          0;
+
+      }
+
+    }
+
+
+    @media (
+      max-width:
+      370px
+    ) {
+
+
+      .credits,
+      .editorial-credit-grid {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
+      .lightbox-image {
+
+        max-width:
+          calc(
+            100vw - 44px
+          );
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <header class="header">
+
+    <a
+      href="/campo"
+      class="brand"
+    >
+      STANSO
+    </a>
+
+
+    <a
+      href="/campo"
+      class="back"
+    >
+      ← CAMPO
+    </a>
+
+  </header>
+
+
+  {
+
+    isScroll ? (
+
+
+      <main>
+
+
+        <section class="scroll-hero">
+
+          <h1 class="scroll-main-title">
+            {scrollContent.title}
+          </h1>
+
+
+          <div class="scroll-bottom">
+
+            <div class="scroll-subtitle">
+
+              {scrollContent.subtitle}
+
+              <br />
+
+              <small>
+                {scrollContent.period}
+              </small>
+
+            </div>
+
+
+            <div class="scroll-opening">
+              {scrollContent.opening}
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <nav class="scroll-nav">
+
+          <a href="#pesquisa">
+            01 PESQUISA
+          </a>
+
+          <a href="#editoriais">
+            02 EDITORIAIS
+          </a>
+
+          <a href="#processo">
+            03 PROCESSO
+          </a>
+
+          <a href="#publicacao">
+            04 PUBLICAÇÃO
+          </a>
+
+          <a href="#creditos">
+            05 CRÉDITOS
+          </a>
+
+        </nav>
+
+
+
+        <section
+          class="scroll-section"
+          id="pesquisa"
+        >
+
+          <header class="section-head">
+
+            <span class="section-number">
+              01
+            </span>
+
+            <h2 class="section-title">
+              PESQUISA
+            </h2>
+
+          </header>
+
+
+          <div class="big-intro">
+            {scrollContent.research.intro}
+          </div>
+
+
+          <div class="chapters">
+
+            {
+              scrollContent
+                .research
+                .chapters
+                .map(
+                  (chapter) => (
+
+                    <article class="chapter">
+
+                      <span class="chapter-number">
+                        {chapter.number}
+                      </span>
+
+                      <h3>
+                        {chapter.title}
+                      </h3>
+
+                      <p>
+                        {chapter.text}
+                      </p>
+
+                    </article>
+
+                  )
+                )
+            }
+
+          </div>
+
+
+          <div class="statement">
+            {scrollContent.research.statement}
+          </div>
+
+        </section>
+
+
+
+        <section
+          class="scroll-section"
+          id="editoriais"
+        >
+
+          <header class="section-head">
+
+            <span class="section-number">
+              02
+            </span>
+
+            <h2 class="section-title">
+              EDITORIAIS
+            </h2>
+
+          </header>
+
+
+          <div class="big-intro">
+            {scrollContent.editorials.intro}
+          </div>
+
+
+          <div class="editorials">
+
+            {
+              scrollEditorials.map(
+                (editorial) => (
+
+                  <article class="editorial-card">
+
+                    {
+                      editorial.project?.hero
+                      && (
+
+                        <button
+                          class="
+                            lightbox-trigger
+                            editorial-preview
+                          "
+                          type="button"
+
+                          data-lightbox-group="
+                            scroll-editorials
+                          "
+
+                          data-lightbox-src={
+                            editorial.project.hero
+                          }
+
+                          data-lightbox-alt={
+                            editorial.title
+                          }
+                        >
+
+                          <img
+                            src={
+                              editorial.project.hero
+                            }
+                            alt={
+                              editorial.title
+                            }
+                            loading="lazy"
+                          />
+
+                        </button>
+
+                      )
+                    }
+
+
+                    <div class="editorial-copy">
+
+                      <div class="editorial-top">
+
+                        <span class="editorial-title">
+                          {editorial.title}
+                        </span>
+
+                        <a
+                          class="editorial-open"
+                          href={
+                            `/projetos/${editorial.slug}`
+                          }
+                        >
+                          abrir →
+                        </a>
+
+                      </div>
+
+
+                      <p class="editorial-text">
+                        {editorial.text}
+                      </p>
+
+                    </div>
+
+                  </article>
+
+                )
+              )
+            }
+
+          </div>
+
+        </section>
+
+
+
+        <section
+          class="scroll-section"
+          id="processo"
+        >
+
+          <header class="section-head">
+
+            <span class="section-number">
+              03
+            </span>
+
+            <h2 class="section-title">
+              PROCESSO
+            </h2>
+
+          </header>
+
+
+          <div class="big-intro">
+            {scrollContent.process.intro}
+          </div>
+
+
+          <div class="media-flow">
+
+            {
+              scrollContent
+                .process
+                .media
+                .map(
+                  (item) => (
+
+                    <figure class="media-item">
+
+                      {
+                        item.type === 'image'
+
+                        ? (
+
+                          <button
+                            class="lightbox-trigger"
+                            type="button"
+
+                            data-lightbox-group="
+                              scroll-processo
+                            "
+
+                            data-lightbox-src={
+                              item.src
+                            }
+
+                            data-lightbox-alt={
+                              item.alt
+                            }
+                          >
+
+                            <img
+                              src={item.src}
+                              alt={item.alt}
+                              loading="lazy"
+                            />
+
+                          </button>
+
+                        )
+
+                        : (
+
+                          <video
+                            src={item.src}
+                            autoplay={
+                              item.autoplay
+                            }
+                            loop={
+                              item.loop
+                            }
+                            muted={
+                              item.muted
+                            }
+                            controls={
+                              item.controls
+                            }
+                            playsinline
+                          />
+
+                        )
+                      }
+
+                    </figure>
+
+                  )
+                )
+            }
+
+          </div>
+
+        </section>
+
+
+
+        <section
+          class="scroll-section"
+          id="publicacao"
+        >
+
+          <header class="section-head">
+
+            <span class="section-number">
+              04
+            </span>
+
+            <h2 class="section-title">
+              PUBLICAÇÃO
+            </h2>
+
+          </header>
+
+
+          <div class="big-intro">
+            {scrollContent.publication.intro}
+          </div>
+
+
+          <div class="physical-object">
+
+            <div class="physical-specs-line">
+              {
+                scrollContent
+                  .publication
+                  .physical
+                  .specs
+              }
+            </div>
+
+
+            <div class="physical-grid">
+
+              {
+                scrollContent
+                  .publication
+                  .physical
+                  .media
+                  .map(
+                    (item) => (
+
+                      <figure
+                        class:list={[
+                          'physical-card',
+                          `physical-card--${item.layout}`
+                        ]}
+                      >
+
+                        <button
+                          class="lightbox-trigger"
+                          type="button"
+
+                          data-lightbox-group="
+                            scroll-publicacao
+                          "
+
+                          data-lightbox-src={
+                            item.src
+                          }
+
+                          data-lightbox-alt={
+                            item.alt
+                          }
+                        >
+
+                          <img
+                            src={item.src}
+                            alt={item.alt}
+                            loading="lazy"
+                          />
+
+                        </button>
+
+                      </figure>
+
+                    )
+                  )
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="publication-pages">
+
+            <div class="media-flow">
+
+              {
+                scrollContent
+                  .publication
+                  .media
+                  .map(
+                    (item) => (
+
+                      <figure class="media-item">
+
+                        {
+                          item.type === 'image'
+
+                          ? (
+
+                            <button
+                              class="lightbox-trigger"
+                              type="button"
+
+                              data-lightbox-group="
+                                scroll-publicacao
+                              "
+
+                              data-lightbox-src={
+                                item.src
+                              }
+
+                              data-lightbox-alt={
+                                item.alt
+                              }
+                            >
+
+                              <img
+                                src={item.src}
+                                alt={item.alt}
+                                loading="lazy"
+                              />
+
+                            </button>
+
+                          )
+
+                          : (
+
+                            <video
+                              src={item.src}
+                              autoplay={
+                                item.autoplay
+                              }
+                              loop={
+                                item.loop
+                              }
+                              muted={
+                                item.muted
+                              }
+                              controls={
+                                item.controls
+                              }
+                              playsinline
+                            />
+
+                          )
+                        }
+
+                      </figure>
+
+                    )
+                  )
+              }
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <section
+          class="scroll-section"
+          id="creditos"
+        >
+
+          <header class="section-head">
+
+            <span class="section-number">
+              05
+            </span>
+
+            <h2 class="section-title">
+              CRÉDITOS
+            </h2>
+
+          </header>
+
+
+          <div class="big-intro">
+            {scrollContent.credits.intro}
+          </div>
+
+
+          <div class="scroll-credit-grid">
+
+            {
+              scrollContent
+                .credits
+                .project
+                .map(
+                  (credit) => (
+
+                    <div>
+
+                      <div class="credit-label">
+                        {credit.label}
+                      </div>
+
+                      <div class="credit-value">
+                        {credit.value}
+                      </div>
+
+                    </div>
+
+                  )
+                )
+            }
+
+          </div>
+
+
+          <div class="scroll-credit-editorials">
+
+            {
+              scrollContent
+                .credits
+                .editorials
+                .map(
+                  (editorial) => (
+
+                    <a
+                      class="credit-project-link"
+                      href={
+                        `/projetos/${editorial.slug}`
+                      }
+                    >
+
+                      <span>
+                        {editorial.title}
+                      </span>
+
+                      <small>
+                        ficha técnica completa →
+                      </small>
+
+                    </a>
+
+                  )
+                )
+            }
+
+          </div>
+
+        </section>
+
+      </main>
+
+
+    ) : isScrollEditorial ? (
+
+
+      <main
+        class:list={[
+          'editorial-project',
+          `editorial-project--${project.slug}`
+        ]}
+      >
+
+
+        <section class="editorial-project-hero">
+
+
+          <div class="editorial-project-image">
+
+            {
+              project.hero
+              ? (
+
+                <button
+                  class="lightbox-trigger"
+                  type="button"
+
+                  data-lightbox-group={
+                    `editorial-${project.slug}`
+                  }
+
+                  data-lightbox-src={
+                    project.hero
+                  }
+
+                  data-lightbox-alt={
+                    project.title
+                  }
+                >
+
+                  <img
+                    src={
+                      project.hero
+                    }
+                    alt={
+                      project.title
+                    }
+                  />
+
+                </button>
+
+              )
+              : null
+            }
+
+          </div>
+
+
+          <div class="editorial-project-info">
+
+            <h1
+              class:list={[
+                'editorial-project-title',
+                titleSizeClass
+              ]}
+            >
+              {project.title}
+            </h1>
+
+
+            <div class="editorial-project-meta">
+
+              {project.year}
+
+              <br />
+
+              {
+                project.roles.join(
+                  ' / '
+                )
+              }
+
+            </div>
+
+
+            <p class="editorial-project-description">
+              {editorialIntro}
+            </p>
+
+
+            <a
+              href="/projetos/scroll"
+              class="editorial-parent-link"
+            >
+              parte de SCROLL →
+            </a>
+
+          </div>
+
+        </section>
+
+
+
+        {
+          project.gallery.length > 0
+          && (
+
+            <section class="editorial-gallery">
+
+              {
+                project.gallery.map(
+                  (
+                    image,
+                    index
+                  ) => {
+
+                    const layout =
+                      getGalleryLayout(
+                        index
+                      );
+
+                    return (
+
+                      <figure
+                        class:list={[
+                          'editorial-photo',
+                          `editorial-photo--${layout}`
+                        ]}
+                      >
+
+                        <button
+                          class="lightbox-trigger"
+                          type="button"
+
+                          data-lightbox-group={
+                            `editorial-${project.slug}`
+                          }
+
+                          data-lightbox-src={
+                            image
+                          }
+
+                          data-lightbox-alt={
+                            `${project.title} — imagem ${index + 1}`
+                          }
+                        >
+
+                          <img
+                            src={
+                              image
+                            }
+
+                            alt={
+                              `${project.title} — imagem ${index + 1}`
+                            }
+
+                            loading="lazy"
+                          />
+
+                        </button>
+
+                      </figure>
+
+                    );
+
+                  }
+                )
+              }
+
+            </section>
+
+          )
+        }
+
+
+
+        <section class="editorial-credits">
+
+          <div class="editorial-credit-label">
+            CRÉDITOS
+          </div>
+
+
+          <div class="editorial-credit-grid">
+
+            {
+              project.credits.map(
+                (credit) => (
+
+                  <div>
+
+                    <div class="credit-label">
+                      {credit.label}
+                    </div>
+
+                    <div class="credit-value">
+                      {credit.value}
+                    </div>
+
+                  </div>
+
+                )
+              )
+            }
+
+          </div>
+
+        </section>
+
+
+
+        <footer class="editorial-project-footer">
+
+          <a
+            href="/projetos/scroll#processo"
+            class="sequence-link"
+          >
+
+            <span class="sequence-label">
+              PROCESSO
+            </span>
+
+            <span class="sequence-title">
+              ver processo em Scroll
+            </span>
+
+            <span class="sequence-meta">
+              pesquisa / desenvolvimento / bastidores
+            </span>
+
+            <span class="sequence-arrow">
+              →
+            </span>
+
+          </a>
+
+
+          <a
+            href="/projetos/scroll"
+            class="sequence-link"
+          >
+
+            <span class="sequence-label">
+              PARTE DE
+            </span>
+
+            <span class="sequence-title">
+              SCROLL
+            </span>
+
+            <span class="sequence-meta">
+              desejo e visualidade na cultura algorítmica
+            </span>
+
+            <span class="sequence-arrow">
+              →
+            </span>
+
+          </a>
+
+
+          {
+            editorialNext
+            && (
+
+              <a
+                href={
+                  `/projetos/${editorialNext.slug}`
+                }
+
+                class="sequence-link"
+              >
+
+                <span class="sequence-label">
+                  PRÓXIMO EDITORIAL
+                </span>
+
+                <span class="sequence-title">
+                  {editorialNext.title}
+                </span>
+
+                <span class="sequence-meta">
+
+                  {editorialNext.year}
+
+                  &nbsp;—&nbsp;
+
+                  {
+                    editorialNext
+                      .roles
+                      .join(
+                        ' / '
+                      )
+                  }
+
+                </span>
+
+                <span class="sequence-arrow">
+                  →
+                </span>
+
+              </a>
+
+            )
+          }
+
+        </footer>
+
+      </main>
+
+
+    ) : (
+
+
+      <main
+        data-random-project={
+          project.randomHero
+          ?
+          'true'
+          :
+          'false'
+        }
+
+        data-random-gallery={
+          randomGalleryData
+        }
+      >
+
+
+        <section class="project-shell project-hero">
+
+          <div class="hero-media">
+
+            {
+              normalHero
+              ? (
+
+                <button
+                  class="lightbox-trigger"
+                  type="button"
+
+                  id={
+                    project.randomHero
+                    ?
+                    'random-project-hero'
+                    :
+                    undefined
+                  }
+
+                  data-lightbox-group={
+                    `project-${project.slug}`
+                  }
+
+                  data-lightbox-src={
+                    normalHero
+                  }
+
+                  data-lightbox-alt={
+                    project.title
+                  }
+                >
+
+                  <img
+                    src={
+                      normalHero
+                    }
+
+                    alt={
+                      project.title
+                    }
+
+                    id={
+                      project.randomHero
+                      ?
+                      'random-project-hero-image'
+                      :
+                      undefined
+                    }
+                  />
+
+                </button>
+
+              )
+              : null
+            }
+
+          </div>
+
+
+          <div class="hero-info">
+
+            <h1
+              class:list={[
+                'project-title',
+                titleSizeClass
+              ]}
+            >
+              {project.title}
+            </h1>
+
+
+            <div class="meta">
+
+              {project.year}
+
+              <br />
+
+              {
+                project.roles.join(
+                  ' / '
+                )
+              }
+
+            </div>
+
+
+            <p class="description">
+              {project.description}
+            </p>
+
+          </div>
+
+        </section>
+
+
+
+        <section class="project-shell credits">
+
+          {
+            project.credits.map(
+              (credit) => (
+
+                <div>
+
+                  <div class="credit-label">
+                    {credit.label}
+                  </div>
+
+                  <div class="credit-value">
+                    {credit.value}
+                  </div>
+
+                </div>
+
+              )
+            )
+          }
+
+        </section>
+
+
+
+        {
+          project.gallery.length > 0
+          && (
+
+            <section class="gallery">
+
+              {
+                project.gallery.map(
+                  (
+                    image,
+                    index
+                  ) => (
+
+                    <figure
+                      class="photo"
+                      data-gallery-index={
+                        index
+                      }
+                    >
+
+                      <button
+                        class="lightbox-trigger"
+                        type="button"
+
+                        data-lightbox-group={
+                          `project-${project.slug}`
+                        }
+
+                        data-lightbox-src={
+                          image
+                        }
+
+                        data-lightbox-alt={
+                          `${project.title} — imagem ${index + 1}`
+                        }
+                      >
+
+                        <img
+                          src={
+                            image
+                          }
+
+                          alt={
+                            `${project.title} — imagem ${index + 1}`
+                          }
+
+                          loading="lazy"
+                        />
+
+                      </button>
+
+                    </figure>
+
+                  )
+                )
+              }
+
+            </section>
+
+          )
+        }
+
+
+        <a
+          class="next"
+          href={
+            `/projetos/${nextProject.slug}`
+          }
+        >
+
+          <span>
+            PRÓXIMO
+          </span>
+
+          <strong>
+            {nextProject.title} →
+          </strong>
+
+        </a>
+
+      </main>
+
+    )
+  }
+
+
+
+  <!-- LIGHTBOX -->
+
+
+  <div
+    class="lightbox"
+    id="lightbox"
+    aria-hidden="true"
+  >
+
+    <button
+      class="lightbox-close"
+      id="lightbox-close"
+      type="button"
+      aria-label="Fechar imagem"
+    >
+      ×
+    </button>
+
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-nav--prev
+      "
+      id="lightbox-prev"
+      type="button"
+      aria-label="Imagem anterior"
+    >
+      ←
+    </button>
+
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-nav--next
+      "
+      id="lightbox-next"
+      type="button"
+      aria-label="Próxima imagem"
+    >
+      →
+    </button>
+
+
+    <div
+      class="lightbox-stage"
+      id="lightbox-stage"
+    >
+
+      <img
+        class="lightbox-image"
+        id="lightbox-image"
+        alt=""
+      />
+
+    </div>
+
+  </div>
+
+
+
+  <script is:inline>
+
+
+    /*
+    ======================================================
+    ARQUIVO P&B
+    ======================================================
+    */
+
+
+    var randomProject =
+      document.querySelector(
+        '[data-random-project="true"]'
+      );
+
+
+    if (
+      randomProject
+    ) {
+
+
+      var rawRandomGallery =
+        randomProject.getAttribute(
+          'data-random-gallery'
+        );
+
+
+      if (
+        rawRandomGallery
+      ) {
+
+
+        try {
+
+
+          var randomGallery =
+            JSON.parse(
+              rawRandomGallery
+            );
+
+
+          if (
+            Array.isArray(
+              randomGallery
+            )
+            &&
+            randomGallery.length > 0
+          ) {
+
+
+            var randomIndex =
+              Math.floor(
+                Math.random()
+                *
+                randomGallery.length
+              );
+
+
+            var randomSrc =
+              randomGallery[
+                randomIndex
+              ];
+
+
+            var randomHeroButton =
+              document.getElementById(
+                'random-project-hero'
+              );
+
+
+            var randomHeroImage =
+              document.getElementById(
+                'random-project-hero-image'
+              );
+
+
+            if (
+              randomHeroButton
+              &&
+              randomHeroImage
+            ) {
+
+
+              randomHeroButton
+                .setAttribute(
+                  'data-lightbox-src',
+                  randomSrc
+                );
+
+
+              randomHeroImage
+                .setAttribute(
+                  'src',
+                  randomSrc
+                );
+
+
+              var duplicate =
+                document.querySelector(
+                  '[data-gallery-index="'
+                  +
+                  randomIndex
+                  +
+                  '"]'
+                );
+
+
+              if (
+                duplicate
+              ) {
+
+                duplicate.setAttribute(
+                  'hidden',
+                  ''
+                );
+
+              }
+
+
+            }
+
+
+          }
+
+
+        }
+        catch (
+          error
+        ) {
+
+        }
+
+
+      }
+
+
+    }
+
+
+
+    /*
+    ======================================================
+    LIGHTBOX
+    ======================================================
+
+    Agora a ordem não depende mais da estrutura da página.
+
+    Cada imagem possui data-lightbox-group.
+    FEED = editorial-feed.
+
+    Portanto:
+    hero + galeria = uma única sequência.
+    ======================================================
+    */
+
+
+    var lightbox =
+      document.getElementById(
+        'lightbox'
+      );
+
+
+    var lightboxImage =
+      document.getElementById(
+        'lightbox-image'
+      );
+
+
+    var lightboxPrev =
+      document.getElementById(
+        'lightbox-prev'
+      );
+
+
+    var lightboxNext =
+      document.getElementById(
+        'lightbox-next'
+      );
+
+
+    var lightboxClose =
+      document.getElementById(
+        'lightbox-close'
+      );
+
+
+    var lightboxStage =
+      document.getElementById(
+        'lightbox-stage'
+      );
+
+
+    var activeTriggers =
+      [];
+
+
+    var currentIndex =
+      -1;
+
+
+
+    function isUsable(
+      trigger
+    ) {
+
+
+      if (
+        !trigger
+      ) {
+
+        return false;
+
+      }
+
+
+      if (
+        trigger.closest(
+          '[hidden]'
+        )
+      ) {
+
+        return false;
+
+      }
+
+
+      return Boolean(
+        trigger.getAttribute(
+          'data-lightbox-src'
+        )
+      );
+
+
+    }
+
+
+
+    function getGroup(
+      trigger
+    ) {
+
+
+      var group =
+        trigger.getAttribute(
+          'data-lightbox-group'
+        );
+
+
+      var all =
+        Array.from(
+          document.querySelectorAll(
+            '.lightbox-trigger'
+          )
+        );
+
+
+      if (
+        !group
+      ) {
+
+        return all.filter(
+          isUsable
+        );
+
+      }
+
+
+      return all.filter(
+        function (
+          item
+        ) {
+
+          return (
+            isUsable(
+              item
+            )
+            &&
+            item.getAttribute(
+              'data-lightbox-group'
+            )
+            ===
+            group
+          );
+
+        }
+      );
+
+
+    }
+
+
+
+    function updateArrows() {
+
+
+      var hide =
+        activeTriggers.length
+        <=
+        1;
+
+
+      if (
+        lightboxPrev
+      ) {
+
+        lightboxPrev.hidden =
+          hide;
+
+      }
+
+
+      if (
+        lightboxNext
+      ) {
+
+        lightboxNext.hidden =
+          hide;
+
+      }
+
+
+    }
+
+
+
+    function showImage(
+      index
+    ) {
+
+
+      if (
+        !lightboxImage
+        ||
+        activeTriggers.length
+        ===
+        0
+      ) {
+
+        return;
+
+      }
+
+
+      var total =
+        activeTriggers.length;
+
+
+      currentIndex =
+        (
+          index
+          +
+          total
+        )
+        %
+        total;
+
+
+      var trigger =
+        activeTriggers[
+          currentIndex
+        ];
+
+
+      var src =
+        trigger.getAttribute(
+          'data-lightbox-src'
+        );
+
+
+      var alt =
+        trigger.getAttribute(
+          'data-lightbox-alt'
+        )
+        ||
+        '';
+
+
+      if (
+        !src
+      ) {
+
+        return;
+
+      }
+
+
+      lightboxImage.setAttribute(
+        'src',
+        src
+      );
+
+
+      lightboxImage.setAttribute(
+        'alt',
+        alt
+      );
+
+
+      updateArrows();
+
+
+    }
+
+
+
+    function openLightbox(
+      trigger
+    ) {
+
+
+      if (
+        !lightbox
+        ||
+        !lightboxImage
+      ) {
+
+        return;
+
+      }
+
+
+      activeTriggers =
+        getGroup(
+          trigger
+        );
+
+
+      currentIndex =
+        activeTriggers.indexOf(
+          trigger
+        );
+
+
+      if (
+        currentIndex < 0
+      ) {
+
+        return;
+
+      }
+
+
+      showImage(
+        currentIndex
+      );
+
+
+      lightbox.classList.add(
+        'is-open'
+      );
+
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+
+
+      document.body.classList.add(
+        'lightbox-open'
+      );
+
+
+    }
+
+
+
+    function closeLightbox() {
+
+
+      if (
+        !lightbox
+      ) {
+
+        return;
+
+      }
+
+
+      lightbox.classList.remove(
+        'is-open'
+      );
+
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+
+      document.body.classList.remove(
+        'lightbox-open'
+      );
+
+
+      activeTriggers =
+        [];
+
+
+      currentIndex =
+        -1;
+
+
+    }
+
+
+
+    function previousImage() {
+
+
+      if (
+        activeTriggers.length
+        <=
+        1
+      ) {
+
+        return;
+
+      }
+
+
+      showImage(
+        currentIndex
+        -
+        1
+      );
+
+
+    }
+
+
+
+    function nextImage() {
+
+
+      if (
+        activeTriggers.length
+        <=
+        1
+      ) {
+
+        return;
+
+      }
+
+
+      showImage(
+        currentIndex
+        +
+        1
+      );
+
+
+    }
+
+
+
+    /*
+    ======================================================
+    CLICK — DELEGAÇÃO GLOBAL
+    ======================================================
+    */
+
+
+    document.addEventListener(
+      'click',
+
+      function (
+        event
+      ) {
+
+
+        var target =
+          event.target;
+
+
+        if (
+          !(
+            target
+            instanceof
+            Element
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        var trigger =
+          target.closest(
+            '.lightbox-trigger'
+          );
+
+
+        if (
+          trigger
+          &&
+          isUsable(
+            trigger
+          )
+        ) {
+
+
+          event.preventDefault();
+
+
+          openLightbox(
+            trigger
+          );
+
+
+          return;
+
+        }
+
+
+        if (
+          target.closest(
+            '#lightbox-prev'
+          )
+        ) {
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          previousImage();
+
+
+          return;
+
+        }
+
+
+        if (
+          target.closest(
+            '#lightbox-next'
+          )
+        ) {
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          nextImage();
+
+
+          return;
+
+        }
+
+
+        if (
+          target.closest(
+            '#lightbox-close'
+          )
+        ) {
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          closeLightbox();
+
+
+          return;
+
+        }
+
+
+        if (
+          lightbox
+          &&
+          lightbox.classList.contains(
+            'is-open'
+          )
+          &&
+          (
+            target
+            ===
+            lightbox
+            ||
+            target
+            ===
+            lightboxStage
+          )
+        ) {
+
+
+          closeLightbox();
+
+
+        }
+
+
+      }
+    );
+
+
+
+    /*
+    ======================================================
+    TECLADO
+    ======================================================
+    */
+
+
+    document.addEventListener(
+      'keydown',
+
+      function (
+        event
+      ) {
+
+
+        if (
+          !lightbox
+          ||
+          !lightbox.classList.contains(
+            'is-open'
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          event.key
+          ===
+          'Escape'
+        ) {
+
+          closeLightbox();
+
+        }
+
+
+        if (
+          event.key
+          ===
+          'ArrowLeft'
+        ) {
+
+
+          event.preventDefault();
+
+
+          previousImage();
+
+
+        }
+
+
+        if (
+          event.key
+          ===
+          'ArrowRight'
+        ) {
+
+
+          event.preventDefault();
+
+
+          nextImage();
+
+
+        }
+
+
+      }
+    );
+
+
+
+    /*
+    ======================================================
+    SWIPE
+    ======================================================
+    */
+
+
+    var touchStartX =
+      null;
+
+
+    var touchStartY =
+      null;
+
+
+    if (
+      lightbox
+    ) {
+
+
+      lightbox.addEventListener(
+        'touchstart',
+
+        function (
+          event
+        ) {
+
+
+          if (
+            event.touches.length
+            !==
+            1
+          ) {
+
+            return;
+
+          }
+
+
+          touchStartX =
+            event.touches[0]
+              .clientX;
+
+
+          touchStartY =
+            event.touches[0]
+              .clientY;
+
+
+        },
+
+        {
+          passive:
+            true
+        }
+      );
+
+
+      lightbox.addEventListener(
+        'touchend',
+
+        function (
+          event
+        ) {
+
+
+          if (
+            touchStartX
+            ===
+            null
+            ||
+            touchStartY
+            ===
+            null
+          ) {
+
+            return;
+
+          }
+
+
+          var endX =
+            event.changedTouches[0]
+              .clientX;
+
+
+          var endY =
+            event.changedTouches[0]
+              .clientY;
+
+
+          var deltaX =
+            endX
+            -
+            touchStartX;
+
+
+          var deltaY =
+            endY
+            -
+            touchStartY;
+
+
+          touchStartX =
+            null;
+
+
+          touchStartY =
+            null;
+
+
+          if (
+            Math.abs(
+              deltaX
+            )
+            <
+            45
+          ) {
+
+            return;
+
+          }
+
+
+          if (
+            Math.abs(
+              deltaX
+            )
+            <=
+            Math.abs(
+              deltaY
+            )
+          ) {
+
+            return;
+
+          }
+
+
+          if (
+            deltaX
+            <
+            0
+          ) {
+
+            nextImage();
+
+          }
+
+          else {
+
+            previousImage();
+
+          }
+
+
+        },
+
+        {
+          passive:
+            true
+        }
+      );
+
+
+    }
+
+
+  </script>
+
+
+</body>
+
+</html>

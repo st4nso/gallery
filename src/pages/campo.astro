@@ -1,0 +1,2433 @@
+---
+import { projects } from '../data/projects';
+
+const STAGE_WIDTH = 2900;
+const STAGE_HEIGHT = 2000;
+
+const projectOrder = [
+  'scroll',
+
+  'nomofobia',
+  'plt',
+  'feed',
+  'irl',
+
+  'memorias-de-marte',
+  'sem-doc',
+  'nunca-mais-do-mesmo',
+
+  'im-so-proud-of-u',
+
+  'sentinel',
+  'dj-smoke',
+  'radio-club',
+
+  'arquivo-pb',
+
+  'crystalline',
+  'palato'
+];
+
+const orderIndex =
+  new Map(
+    projectOrder.map(
+      (slug, index) => [
+        slug,
+        index
+      ]
+    )
+  );
+
+const orderedProjects =
+  [...projects].sort(
+    (a, b) => {
+
+      const aIndex =
+        orderIndex.get(a.slug)
+        ?? 999;
+
+      const bIndex =
+        orderIndex.get(b.slug)
+        ?? 999;
+
+      return aIndex - bIndex;
+
+    }
+  );
+
+const fieldOverrides: Record<
+  string,
+  {
+    x: number;
+    y: number;
+    width: number;
+    imageHeight?: number;
+    fit?: 'cover' | 'contain';
+    objectPosition?: string;
+    opacity?: number;
+    z?: number;
+  }
+> = {
+
+  scroll: {
+    x: 825,
+    y: 650,
+    width: 610,
+    imageHeight: 170,
+    opacity: 1,
+    z: 10
+  },
+
+  nomofobia: {
+    x: 140,
+    y: 160,
+    width: 455,
+    imageHeight: 540,
+    fit: 'cover',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 9
+  },
+
+  plt: {
+    x: 760,
+    y: 1110,
+    width: 255,
+    imageHeight: 335,
+    fit: 'cover',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 8
+  },
+
+  feed: {
+    x: 1660,
+    y: 730,
+    width: 260,
+    imageHeight: 360,
+    fit: 'contain',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 8
+  },
+
+  irl: {
+    x: 1950,
+    y: 1160,
+    width: 205,
+    imageHeight: 275,
+    fit: 'cover',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 7
+  },
+
+  'sem-doc': {
+    x: 1940,
+    y: 130,
+    width: 225,
+    imageHeight: 275,
+    fit: 'cover',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 5
+  },
+
+  'memorias-de-marte': {
+    x: 1580,
+    y: 220,
+    width: 230,
+    imageHeight: 170,
+    fit: 'cover',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 6
+  },
+
+  'nunca-mais-do-mesmo': {
+    x: 1600,
+    y: 1450,
+    width: 205,
+    imageHeight: 265,
+    fit: 'cover',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 5
+  },
+
+  'arquivo-pb': {
+    x: 310,
+    y: 1450,
+    width: 165,
+    imageHeight: 215,
+    fit: 'cover',
+    objectPosition: 'center center',
+    opacity: 1,
+    z: 3
+  }
+
+};
+
+function getField(
+  project: typeof projects[number]
+) {
+
+  return (
+    fieldOverrides[project.slug]
+    ??
+    project.field
+  );
+
+}
+
+function getFieldImage(
+  project: typeof projects[number]
+) {
+
+  if (
+    project.slug ===
+    'scroll'
+  ) {
+    return '';
+  }
+
+  if (
+    project.randomHero &&
+    project.gallery?.length
+  ) {
+    return project.gallery[0];
+  }
+
+  return (
+    project.fieldImage
+    ??
+    project.hero
+    ??
+    project.gallery?.[0]
+    ??
+    ''
+  );
+
+}
+
+function getHref(
+  slug: string
+) {
+  return `/projetos/${slug}`;
+}
+---
+
+<!doctype html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <meta
+    name="description"
+    content="Campo de projetos de Lucas Stanso."
+  />
+
+  <title>
+    CAMPO — STANSO
+  </title>
+
+  <style>
+
+    :root {
+      --bg: #eeeeea;
+      --ink: #11110f;
+      --muted: #777771;
+      --line: rgba(17,17,15,.14);
+      --grid-line: rgba(17,17,15,.055);
+      --grid-size: 42px;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      margin: 0;
+      padding: 0;
+
+      min-width: 100%;
+
+      background: var(--bg);
+
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+
+      min-width: 100%;
+
+      overflow: hidden;
+
+      background: var(--bg);
+
+      color: var(--ink);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    img,
+    video {
+      display: block;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    /*
+    ========================================================
+    HEADER
+    ========================================================
+    */
+
+    .site-header {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+      right: 0;
+
+      z-index: 5000;
+
+      height: 64px;
+
+      padding: 0 28px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      border-bottom: 1px solid rgba(17,17,15,.09);
+
+      background: rgba(238,238,234,.95);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-brand {
+      color: var(--ink);
+
+      text-decoration: none;
+
+      font-size: 11px;
+      font-weight: 630;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+
+      gap: 25px;
+    }
+
+    .site-nav a {
+      color: var(--muted);
+
+      text-decoration: none;
+
+      font-size: 10px;
+    }
+
+    .site-nav a:hover,
+    .site-nav a[aria-current="page"] {
+      color: var(--ink);
+    }
+
+    /*
+    ========================================================
+    VIEWPORT
+    ========================================================
+    */
+
+    .field-viewport {
+      position: fixed;
+
+      inset:
+        64px
+        0
+        0;
+
+      overflow: hidden;
+
+      overscroll-behavior: none;
+      touch-action: none;
+
+      cursor: grab;
+
+      user-select: none;
+
+      background: var(--bg);
+    }
+
+    .field-viewport.is-dragging {
+      cursor: grabbing;
+    }
+
+    /*
+    ========================================================
+    STAGE
+    ========================================================
+    */
+
+    .field-stage {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 2900px;
+      height: 2000px;
+
+      background-color: var(--bg);
+
+      background-image:
+        linear-gradient(
+          to right,
+          var(--grid-line) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          var(--grid-line) 1px,
+          transparent 1px
+        );
+
+      background-size:
+        var(--grid-size)
+        var(--grid-size);
+
+      transform: translate3d(0,0,0);
+
+      transform-origin: 0 0;
+
+      will-change: transform;
+    }
+
+    /*
+    ========================================================
+    PROJETOS
+    ========================================================
+    */
+
+    .field-item {
+      position: absolute;
+
+      left: var(--x);
+      top: var(--y);
+
+      width: var(--w);
+
+      z-index: var(--z);
+
+      opacity: 1;
+    }
+
+    .field-card {
+      position: relative;
+
+      z-index: 2;
+
+      display: block;
+
+      width: 100%;
+
+      color: var(--ink);
+
+      text-decoration: none;
+
+      transform: translate3d(0,0,0);
+
+      transform-origin: center;
+
+      transition: opacity .16s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+
+      .field-card:hover {
+        opacity: .72;
+      }
+
+      .field-card--feed:hover {
+        opacity: 1;
+      }
+
+      .field-card--scroll:hover {
+        opacity: .62;
+      }
+
+    }
+
+    .field-media {
+      width: 100%;
+      height: var(--image-h);
+
+      overflow: hidden;
+
+      background: transparent;
+    }
+
+    .field-media img,
+    .field-media video {
+      width: 100%;
+      height: 100%;
+
+      object-fit: var(--fit);
+      object-position: var(--object-position);
+
+      pointer-events: none;
+    }
+
+    .field-caption {
+      padding-top: 8px;
+
+      display: flex;
+
+      align-items: baseline;
+      justify-content: space-between;
+
+      gap: 14px;
+    }
+
+    .field-title {
+      min-width: 0;
+
+      font-size: 10px;
+      line-height: 1;
+
+      font-weight: 560;
+
+      letter-spacing: -.02em;
+    }
+
+    .field-meta {
+      flex: 0 0 auto;
+
+      color: var(--muted);
+
+      font-size: 8px;
+      line-height: 1;
+    }
+
+    /*
+    ========================================================
+    SCROLL
+    ========================================================
+    */
+
+    .field-card--scroll {
+      width: 100%;
+
+      padding: 0;
+
+      opacity: 1;
+
+      background: transparent;
+    }
+
+    .scroll-title {
+      margin: 0;
+
+      width: max-content;
+
+      max-width: none;
+
+      font-size: clamp(76px,7vw,132px);
+      line-height: .73;
+
+      font-weight: 580;
+
+      letter-spacing: -.075em;
+
+      white-space: nowrap;
+    }
+
+    .scroll-info {
+      margin-top: 20px;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,1fr)
+        auto;
+
+      gap: 35px;
+
+      align-items: start;
+    }
+
+    .scroll-subtitle {
+      width: 260px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+      line-height: 1.4;
+    }
+
+    .scroll-year {
+      color: var(--muted);
+
+      font-size: 8px;
+      line-height: 1;
+    }
+
+    .field-card--nomofobia
+    .field-title {
+      font-size: 12px;
+    }
+
+    /*
+    ========================================================
+    FEED
+    ========================================================
+    */
+
+    .field-card--feed {
+      padding: 9px;
+
+      background: #080808;
+
+      color: white;
+    }
+
+    .feed-ad-head {
+      min-height: 30px;
+
+      padding: 0 2px 8px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+
+      color: rgba(255,255,255,.67);
+
+      font-size: 8px;
+    }
+
+    .field-card--feed
+    .field-media {
+      height: auto;
+
+      background: white;
+    }
+
+    .field-card--feed
+    .field-media img,
+    .field-card--feed
+    .field-media video {
+      width: 100%;
+      height: auto;
+
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .feed-ad-foot {
+      min-height: 39px;
+
+      padding: 9px 2px 0;
+
+      display: grid;
+
+      grid-template-columns:
+        1fr
+        auto;
+
+      align-items: end;
+
+      gap: 20px;
+    }
+
+    .feed-ad-title {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .feed-ad-cta {
+      color: rgba(255,255,255,.68);
+
+      font-size: 8px;
+    }
+
+    .field-item[data-zone="archive"] .field-title,
+    .field-item[data-zone="live"] .field-title,
+    .field-item[data-zone="music"] .field-title {
+      font-size: 9px;
+    }
+
+    /*
+    ========================================================
+    INSTAGRAM / LINKS EXTERNOS
+    ========================================================
+    */
+
+    .field-external-link {
+      position: absolute;
+
+      z-index: 4;
+
+      display: block;
+
+      width: max-content;
+
+      color: var(--ink);
+
+      text-decoration: none;
+
+      transition: opacity .16s ease;
+
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .field-external-link small {
+      display: block;
+
+      margin-bottom: 4px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+      line-height: 1.2;
+
+      font-weight: 400;
+
+      letter-spacing: .02em;
+    }
+
+    .field-external-link strong {
+      display: block;
+
+      font-size: 11px;
+      line-height: 1.2;
+
+      font-weight: 560;
+
+      letter-spacing: -.015em;
+    }
+
+    .field-external-link--stanso {
+      left: 250px;
+      top: 1110px;
+    }
+
+    .field-external-link--scrollblog {
+      left: 2360px;
+      top: 330px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+
+      .field-external-link:hover {
+        opacity: .58;
+      }
+
+    }
+
+    .field-external-mobile {
+      display: none;
+    }
+
+    /*
+    ========================================================
+    FALLBACK
+    ========================================================
+    */
+
+    .field-fallback {
+      width: 100%;
+
+      min-height: 105px;
+
+      padding: 12px;
+
+      display: flex;
+      align-items: flex-end;
+
+      border: 1px solid var(--line);
+    }
+
+    .field-fallback span {
+      font-size: clamp(17px,1.5vw,26px);
+      line-height: .9;
+
+      font-weight: 540;
+
+      letter-spacing: -.04em;
+    }
+
+    /*
+    ========================================================
+    MOVIMENTO
+    ========================================================
+    */
+
+    .field-item[data-motion="drift-a"]
+    .field-card {
+      animation:
+        driftA
+        22s
+        ease-in-out
+        infinite
+        alternate;
+    }
+
+    .field-item[data-motion="drift-b"]
+    .field-card {
+      animation:
+        driftB
+        27s
+        ease-in-out
+        infinite
+        alternate;
+    }
+
+    .field-item[data-motion="drift-c"]
+    .field-card {
+      animation:
+        driftC
+        18s
+        ease-in-out
+        infinite
+        alternate;
+    }
+
+    .field-item[data-motion="float"]
+    .field-card {
+      animation:
+        fieldFloat
+        25s
+        ease-in-out
+        infinite
+        alternate;
+    }
+
+    .field-item[data-slug="scroll"]
+    .field-card,
+    .field-item[data-slug="nomofobia"]
+    .field-card {
+      animation: none !important;
+    }
+
+    @keyframes driftA {
+      from {
+        transform: translate3d(-2px,2px,0);
+      }
+
+      to {
+        transform: translate3d(5px,-4px,0);
+      }
+    }
+
+    @keyframes driftB {
+      from {
+        transform: translate3d(3px,-2px,0);
+      }
+
+      to {
+        transform: translate3d(-5px,5px,0);
+      }
+    }
+
+    @keyframes driftC {
+      from {
+        transform: translate3d(-3px,-1px,0);
+      }
+
+      to {
+        transform: translate3d(4px,6px,0);
+      }
+    }
+
+    @keyframes fieldFloat {
+      from {
+        transform: translate3d(0,-3px,0);
+      }
+
+      to {
+        transform: translate3d(2px,5px,0);
+      }
+    }
+
+    /*
+    ========================================================
+    MOBILE
+    ========================================================
+    */
+
+    @media (max-width: 900px) {
+
+      :root {
+        --grid-size: 36px;
+        --grid-line: rgba(17,17,15,.045);
+      }
+
+      html {
+        width: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        width: 100%;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        overscroll-behavior-x: none;
+
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .site-header {
+        position: sticky;
+
+        top: 0;
+
+        height: 56px;
+        min-height: 56px;
+
+        padding-left:
+          max(14px, env(safe-area-inset-left));
+
+        padding-right:
+          max(14px, env(safe-area-inset-right));
+      }
+
+      .site-brand {
+        min-height: 44px;
+
+        display: inline-flex;
+        align-items: center;
+
+        font-size: 10px;
+      }
+
+      .site-nav {
+        gap: clamp(8px,3vw,14px);
+      }
+
+      .site-nav a {
+        min-width: 38px;
+        min-height: 44px;
+
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 9px;
+
+        white-space: nowrap;
+
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .field-viewport {
+        position: relative;
+
+        inset: auto;
+
+        width: 100%;
+        max-width: 100%;
+
+        height: auto;
+
+        overflow: visible;
+
+        cursor: default;
+
+        touch-action: pan-y;
+
+        user-select: auto;
+
+        overscroll-behavior: auto;
+      }
+
+      .field-stage {
+        position: relative;
+
+        top: auto;
+        left: auto;
+
+        width: 100%;
+        max-width: 100%;
+
+        height: auto;
+
+        min-height: 100svh;
+
+        padding:
+          clamp(28px,8vw,46px)
+          clamp(12px,3.8vw,18px)
+          max(96px,env(safe-area-inset-bottom));
+
+        display: block;
+
+        background-position: 0 0;
+
+        transform: none !important;
+
+        will-change: auto;
+      }
+
+      .field-item {
+        position: relative;
+
+        left: auto !important;
+        top: auto !important;
+
+        z-index: auto !important;
+
+        opacity: 1 !important;
+
+        width: 100% !important;
+        max-width: 100%;
+
+        margin:
+          0
+          0
+          clamp(78px,23vw,118px);
+      }
+
+      .field-card {
+        max-width: 100%;
+
+        animation: none !important;
+        transform: none !important;
+
+        opacity: 1 !important;
+
+        touch-action: manipulation;
+
+        -webkit-tap-highlight-color:
+          rgba(17,17,15,.08);
+      }
+
+      .field-card:hover {
+        opacity: 1 !important;
+      }
+
+      .field-card:active {
+        opacity: .82 !important;
+      }
+
+      .field-card:focus-visible {
+        outline:
+          1px
+          solid
+          rgba(17,17,15,.55);
+
+        outline-offset: 5px;
+      }
+
+      .field-item[data-slug="scroll"] {
+        width: 100% !important;
+
+        padding:
+          clamp(34px,10vw,52px)
+          0
+          clamp(52px,14vw,76px);
+
+        margin-bottom:
+          clamp(64px,18vw,86px);
+      }
+
+      .scroll-title {
+        max-width: 100%;
+
+        font-size: clamp(68px,23vw,124px);
+        line-height: .73;
+
+        letter-spacing: -.075em;
+      }
+
+      .scroll-info {
+        margin-top: 18px;
+
+        grid-template-columns:
+          minmax(0,1fr)
+          auto;
+
+        gap: 14px;
+      }
+
+      .scroll-subtitle {
+        width: min(250px,68vw);
+
+        font-size: 9px;
+        line-height: 1.45;
+      }
+
+      .scroll-year {
+        padding-top: 1px;
+
+        font-size: 8px;
+
+        white-space: nowrap;
+      }
+
+      /*
+      HIERARQUIA
+      */
+
+      .field-item[data-slug="nomofobia"] {
+        width: 100% !important;
+        margin-bottom: clamp(88px,26vw,124px);
+      }
+
+      .field-item[data-slug="plt"] {
+        width: 76% !important;
+        margin-left: auto;
+        margin-right: 0;
+      }
+
+      .field-item[data-slug="feed"] {
+        width: 92% !important;
+        margin-left: 0;
+        margin-right: auto;
+        margin-bottom: clamp(92px,27vw,126px);
+      }
+
+      .field-item[data-slug="irl"] {
+        width: 70% !important;
+        margin-left: auto;
+        margin-right: 0;
+      }
+
+      .field-item[data-slug="memorias-de-marte"] {
+        width: 84% !important;
+        margin-left: 2%;
+        margin-right: auto;
+      }
+
+      .field-item[data-slug="sem-doc"] {
+        width: 76% !important;
+        margin-left: 6%;
+        margin-right: auto;
+      }
+
+      .field-item[data-slug="nunca-mais-do-mesmo"] {
+        width: 72% !important;
+        margin-left: auto;
+        margin-right: 2%;
+      }
+
+      .field-item[data-slug="im-so-proud-of-u"] {
+        width: 68% !important;
+        margin-left: 9%;
+        margin-right: auto;
+      }
+
+      .field-item[data-slug="sentinel"] {
+        width: 60% !important;
+        margin-left: auto;
+        margin-right: 4%;
+      }
+
+      .field-item[data-slug="dj-smoke"] {
+        width: 64% !important;
+        margin-left: 4%;
+        margin-right: auto;
+      }
+
+      .field-item[data-slug="radio-club"] {
+        width: 60% !important;
+        margin-left: auto;
+        margin-right: 8%;
+      }
+
+      .field-item[data-slug="arquivo-pb"] {
+        width: 58% !important;
+        margin-left: 7%;
+        margin-right: auto;
+      }
+
+      .field-item[data-slug="crystalline"] {
+        width: 56% !important;
+        margin-left: auto;
+        margin-right: 5%;
+      }
+
+      .field-item[data-slug="palato"] {
+        width: 54% !important;
+        margin-left: 7%;
+        margin-right: auto;
+        margin-bottom: 0;
+      }
+
+      /*
+      IMAGENS
+      */
+
+      .field-media {
+        width: 100%;
+        max-width: 100%;
+
+        height: auto;
+
+        overflow: visible;
+      }
+
+      .field-media img,
+      .field-media video {
+        display: block;
+
+        width: 100%;
+        max-width: 100%;
+
+        height: auto;
+        max-height: none;
+
+        object-fit: contain;
+        object-position: center;
+      }
+
+      /*
+      INSTAGRAM
+      */
+
+      .field-external-link {
+        display: none;
+      }
+
+      .field-external-mobile {
+        display: block;
+
+        width: 100%;
+
+        margin-top:
+          clamp(90px,24vw,118px);
+
+        padding-top: 16px;
+
+        border-top: 1px solid var(--line);
+      }
+
+      .field-external-mobile-label {
+        margin-bottom: 22px;
+
+        color: var(--muted);
+
+        font-size: 8px;
+        line-height: 1;
+
+        letter-spacing: .03em;
+      }
+
+      .field-external-mobile-links {
+        display: grid;
+
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
+
+        gap: 14px;
+      }
+
+      .field-external-mobile a {
+        min-width: 0;
+        min-height: 54px;
+
+        padding: 12px 0;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 12px;
+
+        border-top: 1px solid var(--line);
+
+        color: var(--ink);
+
+        text-decoration: none;
+
+        font-size: 11px;
+        line-height: 1.2;
+
+        font-weight: 560;
+
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .field-external-mobile a:active {
+        opacity: .6;
+      }
+
+      .field-card--feed {
+        padding: 8px;
+      }
+
+      .feed-ad-head {
+        min-height: 32px;
+        padding-bottom: 7px;
+      }
+
+      .feed-ad-foot {
+        min-height: 42px;
+        padding-top: 8px;
+      }
+
+      .field-caption {
+        padding-top: 9px;
+
+        align-items: flex-start;
+
+        gap: 10px;
+      }
+
+      .field-title {
+        max-width: calc(100% - 58px);
+
+        font-size: 10px !important;
+        line-height: 1.18;
+
+        overflow-wrap: anywhere;
+      }
+
+      .field-meta {
+        padding-top: 1px;
+
+        font-size: 8px;
+
+        white-space: nowrap;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .site-nav {
+        gap: 7px;
+      }
+
+      .site-nav a {
+        min-width: auto;
+
+        padding: 0 3px;
+
+        font-size: 8.5px;
+      }
+
+      .field-item[data-slug="memorias-de-marte"] {
+        width: 88% !important;
+        margin-left: 0;
+      }
+
+      .field-item[data-slug="nunca-mais-do-mesmo"] {
+        width: 76% !important;
+      }
+
+      .field-item[data-slug="arquivo-pb"] {
+        width: 62% !important;
+      }
+
+      .field-item[data-slug="im-so-proud-of-u"] {
+        width: 71% !important;
+      }
+
+    }
+
+    @media (max-width: 390px) {
+
+      :root {
+        --grid-size: 32px;
+      }
+
+      .site-header {
+        height: 54px;
+        min-height: 54px;
+
+        padding-left:
+          max(12px, env(safe-area-inset-left));
+
+        padding-right:
+          max(12px, env(safe-area-inset-right));
+      }
+
+      .site-brand {
+        font-size: 9px;
+      }
+
+      .site-nav {
+        gap: 5px;
+      }
+
+      .site-nav a {
+        min-height: 42px;
+
+        padding: 0 2px;
+
+        font-size: 8px;
+      }
+
+      .field-stage {
+        padding-top: 24px;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .field-item {
+        margin-bottom: clamp(70px,22vw,92px);
+      }
+
+      .field-item[data-slug="scroll"] {
+        padding-top: 30px;
+        margin-bottom: 64px;
+      }
+
+      .scroll-title {
+        font-size: clamp(64px,22.5vw,90px);
+      }
+
+      .scroll-subtitle {
+        width: min(215px,66vw);
+
+        font-size: 8.5px;
+      }
+
+      .field-item[data-slug="nomofobia"] {
+        width: 100% !important;
+      }
+
+      .field-item[data-slug="plt"] {
+        width: 82% !important;
+      }
+
+      .field-item[data-slug="feed"] {
+        width: 94% !important;
+      }
+
+      .field-item[data-slug="irl"] {
+        width: 76% !important;
+      }
+
+      .field-item[data-slug="memorias-de-marte"] {
+        width: 90% !important;
+      }
+
+      .field-item[data-slug="sem-doc"] {
+        width: 80% !important;
+      }
+
+      .field-item[data-slug="nunca-mais-do-mesmo"] {
+        width: 79% !important;
+      }
+
+      .field-item[data-slug="im-so-proud-of-u"] {
+        width: 74% !important;
+      }
+
+      .field-item[data-slug="sentinel"] {
+        width: 66% !important;
+      }
+
+      .field-item[data-slug="dj-smoke"] {
+        width: 69% !important;
+      }
+
+      .field-item[data-slug="radio-club"] {
+        width: 65% !important;
+      }
+
+      .field-item[data-slug="arquivo-pb"] {
+        width: 65% !important;
+      }
+
+      .field-item[data-slug="crystalline"] {
+        width: 62% !important;
+      }
+
+      .field-item[data-slug="palato"] {
+        width: 60% !important;
+      }
+
+      .field-external-mobile {
+        margin-top: 84px;
+      }
+
+      .field-external-mobile-links {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+    }
+
+    @media (max-width: 340px) {
+
+      .site-brand {
+        font-size: 8.5px;
+      }
+
+      .site-nav {
+        gap: 3px;
+      }
+
+      .site-nav a {
+        font-size: 7.5px;
+      }
+
+      .scroll-title {
+        font-size: 21.5vw;
+      }
+
+      .field-title {
+        max-width: calc(100% - 52px);
+      }
+
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .field-card {
+        animation: none !important;
+        transition: none !important;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <header class="site-header">
+
+    <a
+      href="/campo"
+      class="site-brand"
+    >
+      STANSO
+    </a>
+
+    <nav
+      class="site-nav"
+      aria-label="Navegação principal"
+    >
+
+      <a
+        href="/campo"
+        aria-current="page"
+      >
+        CAMPO
+      </a>
+
+      <a href="/indice">
+        ÍNDICE
+      </a>
+
+      <a href="/indice#sobre">
+        CONTATO
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <main
+    class="field-viewport"
+    id="field-viewport"
+  >
+
+    <div
+      class="field-stage"
+      id="field-stage"
+      data-stage-width={STAGE_WIDTH}
+      data-stage-height={STAGE_HEIGHT}
+    >
+
+      {
+        orderedProjects.map(
+          (project) => {
+
+            const field =
+              getField(project);
+
+            if (!field) {
+              return null;
+            }
+
+            const image =
+              getFieldImage(project);
+
+            const imageHeight =
+              field.imageHeight
+              ??
+              Math.round(
+                field.width * 1.18
+              );
+
+            const fit =
+              field.fit
+              ??
+              'cover';
+
+            const objectPosition =
+              field.objectPosition
+              ??
+              'center center';
+
+            const z =
+              field.z
+              ??
+              1;
+
+            const motion =
+              project.motion
+              ??
+              'still';
+
+            const zone =
+              project.zone
+              ??
+              'archive';
+
+            const href =
+              getHref(project.slug);
+
+            const style = `
+              --x:${field.x}px;
+              --y:${field.y}px;
+              --w:${field.width}px;
+              --image-h:${imageHeight}px;
+              --fit:${fit};
+              --object-position:${objectPosition};
+              --z:${z};
+            `;
+
+            const galleryData =
+              project.randomHero
+                ? JSON.stringify(
+                    project.gallery
+                  )
+                : '';
+
+            return (
+
+              <article
+                class="field-item"
+                data-slug={project.slug}
+                data-motion={motion}
+                data-zone={zone}
+                data-x={field.x}
+                data-y={field.y}
+                data-w={field.width}
+                data-h={imageHeight}
+                data-random-hero={
+                  project.randomHero
+                    ? 'true'
+                    : 'false'
+                }
+                data-gallery={galleryData}
+                style={style}
+              >
+
+                {
+                  project.slug === 'scroll'
+                    ? (
+
+                      <a
+                        href="/projetos/scroll"
+                        class="
+                          field-card
+                          field-card--scroll
+                        "
+                      >
+
+                        <h1 class="scroll-title">
+                          SCROLL
+                        </h1>
+
+                        <div class="scroll-info">
+
+                          <div class="scroll-subtitle">
+                            desejo e visualidade na cultura algorítmica
+                          </div>
+
+                          <div class="scroll-year">
+                            2025—2026
+                          </div>
+
+                        </div>
+
+                      </a>
+
+                    )
+
+                    : project.slug === 'feed'
+
+                    ? (
+
+                      <a
+                        href="/projetos/feed"
+                        class="
+                          field-card
+                          field-card--feed
+                        "
+                      >
+
+                        <div class="feed-ad-head">
+                          <span>PATROCINADO</span>
+                          <span>FEED</span>
+                        </div>
+
+                        {
+                          project.fieldVideo
+                            ? (
+
+                              <div class="field-media">
+
+                                <video
+                                  src={project.fieldVideo}
+                                  autoplay
+                                  muted
+                                  loop
+                                  playsinline
+                                  preload="metadata"
+                                >
+                                </video>
+
+                              </div>
+
+                            )
+
+                            : image
+
+                            ? (
+
+                              <div class="field-media">
+
+                                <img
+                                  src={image}
+                                  alt="FEED"
+                                  draggable="false"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+
+                              </div>
+
+                            )
+
+                            : null
+                        }
+
+                        <div class="feed-ad-foot">
+                          <span class="feed-ad-title">
+                            FEED
+                          </span>
+
+                          <span class="feed-ad-cta">
+                            COMPRE AQUI ↗
+                          </span>
+                        </div>
+
+                      </a>
+
+                    )
+
+                    : (
+
+                      <a
+                        href={href}
+                        class={`field-card field-card--${project.slug}`}
+                      >
+
+                        {
+                          project.fieldVideo
+                            ? (
+
+                              <div class="field-media">
+
+                                <video
+                                  src={project.fieldVideo}
+                                  autoplay
+                                  muted
+                                  loop
+                                  playsinline
+                                  preload="metadata"
+                                >
+                                </video>
+
+                              </div>
+
+                            )
+
+                            : image
+
+                            ? (
+
+                              <div class="field-media">
+
+                                <img
+                                  src={image}
+                                  alt={project.title}
+                                  draggable="false"
+                                  loading={
+                                    project.slug === 'nomofobia'
+                                      ? 'eager'
+                                      : 'lazy'
+                                  }
+                                  decoding="async"
+                                />
+
+                              </div>
+
+                            )
+
+                            : (
+
+                              <div class="field-fallback">
+                                <span>
+                                  {project.title}
+                                </span>
+                              </div>
+
+                            )
+                        }
+
+                        <div class="field-caption">
+
+                          <span class="field-title">
+                            {project.title}
+                          </span>
+
+                          <span class="field-meta">
+                            {project.year}
+                          </span>
+
+                        </div>
+
+                      </a>
+
+                    )
+                }
+
+              </article>
+
+            );
+
+          }
+        )
+      }
+
+
+      <!-- INSTAGRAM / DESKTOP -->
+
+
+      <a
+        class="
+          field-external-link
+          field-external-link--stanso
+        "
+        href="https://www.instagram.com/stanso__/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir Instagram @stanso__ em nova aba"
+      >
+        <small>
+          INSTAGRAM ↗
+        </small>
+
+        <strong>
+          @stanso__
+        </strong>
+      </a>
+
+
+      <a
+        class="
+          field-external-link
+          field-external-link--scrollblog
+        "
+        href="https://www.instagram.com/scrollblog/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir Instagram @scrollblog em nova aba"
+      >
+        <small>
+          INSTAGRAM ↗
+        </small>
+
+        <strong>
+          @scrollblog
+        </strong>
+      </a>
+
+
+      <!-- INSTAGRAM / MOBILE -->
+
+
+      <section
+        class="field-external-mobile"
+        aria-label="Links externos"
+      >
+
+        <div class="field-external-mobile-label">
+          FORA DO CAMPO
+        </div>
+
+        <div class="field-external-mobile-links">
+
+          <a
+            href="https://www.instagram.com/stanso__/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>
+              @stanso__
+            </span>
+
+            <span aria-hidden="true">
+              ↗
+            </span>
+          </a>
+
+          <a
+            href="https://www.instagram.com/scrollblog/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>
+              @scrollblog
+            </span>
+
+            <span aria-hidden="true">
+              ↗
+            </span>
+          </a>
+
+        </div>
+
+      </section>
+
+
+    </div>
+
+  </main>
+
+
+  <script is:inline>
+
+    /*
+    ======================================================
+    ARQUIVO P&B
+    ======================================================
+    */
+
+    document
+      .querySelectorAll(
+        '[data-random-hero="true"]'
+      )
+      .forEach(
+        function (item) {
+
+          var rawGallery =
+            item.getAttribute(
+              'data-gallery'
+            );
+
+          if (!rawGallery) {
+            return;
+          }
+
+          var gallery = [];
+
+          try {
+            gallery =
+              JSON.parse(
+                rawGallery
+              );
+          }
+          catch (error) {
+            return;
+          }
+
+          if (
+            !Array.isArray(gallery) ||
+            gallery.length === 0
+          ) {
+            return;
+          }
+
+          var image =
+            item.querySelector(
+              '.field-media img'
+            );
+
+          if (!image) {
+            return;
+          }
+
+          var index =
+            Math.floor(
+              Math.random() *
+              gallery.length
+            );
+
+          image.setAttribute(
+            'src',
+            gallery[index]
+          );
+
+        }
+      );
+
+
+    /*
+    ======================================================
+    PAN / DRAG
+    ======================================================
+    */
+
+    var viewport =
+      document.getElementById(
+        'field-viewport'
+      );
+
+    var stage =
+      document.getElementById(
+        'field-stage'
+      );
+
+    if (
+      viewport &&
+      stage
+    ) {
+
+      var stageWidth =
+        Number(
+          stage.getAttribute(
+            'data-stage-width'
+          )
+        )
+        ||
+        2900;
+
+      var stageHeight =
+        Number(
+          stage.getAttribute(
+            'data-stage-height'
+          )
+        )
+        ||
+        2000;
+
+      var cameraX = 0;
+      var cameraY = 0;
+
+      var dragging = false;
+
+      var pointerStartX = 0;
+      var pointerStartY = 0;
+
+      var cameraStartX = 0;
+      var cameraStartY = 0;
+
+      var initialized = false;
+
+
+      function isDesktop() {
+
+        return window.matchMedia(
+          '(min-width: 901px)'
+        ).matches;
+
+      }
+
+
+      function clampCamera() {
+
+        if (!isDesktop()) {
+          return;
+        }
+
+        var viewportWidth =
+          viewport.clientWidth;
+
+        var viewportHeight =
+          viewport.clientHeight;
+
+        var edge = 110;
+
+        var minX =
+          viewportWidth -
+          stageWidth -
+          edge;
+
+        var maxX =
+          edge;
+
+        var minY =
+          viewportHeight -
+          stageHeight -
+          edge;
+
+        var maxY =
+          edge;
+
+        cameraX =
+          Math.min(
+            maxX,
+            Math.max(
+              minX,
+              cameraX
+            )
+          );
+
+        cameraY =
+          Math.min(
+            maxY,
+            Math.max(
+              minY,
+              cameraY
+            )
+          );
+
+      }
+
+
+      function renderCamera() {
+
+        if (!isDesktop()) {
+
+          stage.style.transform =
+            'none';
+
+          return;
+
+        }
+
+        clampCamera();
+
+        stage.style.transform =
+          'translate3d(' +
+          cameraX +
+          'px,' +
+          cameraY +
+          'px,0)';
+
+      }
+
+
+      function centerOnScroll() {
+
+        if (!isDesktop()) {
+          return;
+        }
+
+        var scrollItem =
+          stage.querySelector(
+            '[data-slug="scroll"]'
+          );
+
+        if (!scrollItem) {
+          return;
+        }
+
+        var x =
+          Number(
+            scrollItem.getAttribute(
+              'data-x'
+            )
+          );
+
+        var y =
+          Number(
+            scrollItem.getAttribute(
+              'data-y'
+            )
+          );
+
+        var width =
+          Number(
+            scrollItem.getAttribute(
+              'data-w'
+            )
+          );
+
+        var height =
+          Number(
+            scrollItem.getAttribute(
+              'data-h'
+            )
+          );
+
+        cameraX =
+          viewport.clientWidth / 2 -
+          (
+            x +
+            width / 2
+          );
+
+        cameraY =
+          viewport.clientHeight / 2 -
+          (
+            y +
+            height / 2
+          );
+
+        renderCamera();
+
+      }
+
+
+      viewport.addEventListener(
+        'pointerdown',
+
+        function (event) {
+
+          if (!isDesktop()) {
+            return;
+          }
+
+          if (event.button !== 0) {
+            return;
+          }
+
+          /*
+          Links de projeto e Instagram nunca
+          iniciam o gesto de arrastar.
+          */
+
+          var interactive =
+            event.target.closest(
+              '.field-card, .field-external-link'
+            );
+
+          if (interactive) {
+            return;
+          }
+
+          dragging = true;
+
+          pointerStartX =
+            event.clientX;
+
+          pointerStartY =
+            event.clientY;
+
+          cameraStartX =
+            cameraX;
+
+          cameraStartY =
+            cameraY;
+
+          viewport.classList.add(
+            'is-dragging'
+          );
+
+          try {
+
+            viewport.setPointerCapture(
+              event.pointerId
+            );
+
+          }
+          catch (error) {
+          }
+
+        }
+      );
+
+
+      viewport.addEventListener(
+        'pointermove',
+
+        function (event) {
+
+          if (
+            !dragging ||
+            !isDesktop()
+          ) {
+            return;
+          }
+
+          cameraX =
+            cameraStartX +
+            (
+              event.clientX -
+              pointerStartX
+            );
+
+          cameraY =
+            cameraStartY +
+            (
+              event.clientY -
+              pointerStartY
+            );
+
+          renderCamera();
+
+        }
+      );
+
+
+      function endDrag(
+        event
+      ) {
+
+        if (!dragging) {
+          return;
+        }
+
+        dragging = false;
+
+        viewport.classList.remove(
+          'is-dragging'
+        );
+
+        try {
+
+          viewport.releasePointerCapture(
+            event.pointerId
+          );
+
+        }
+        catch (error) {
+        }
+
+      }
+
+
+      viewport.addEventListener(
+        'pointerup',
+        endDrag
+      );
+
+      viewport.addEventListener(
+        'pointercancel',
+        endDrag
+      );
+
+
+      viewport.addEventListener(
+        'wheel',
+
+        function (event) {
+
+          if (!isDesktop()) {
+            return;
+          }
+
+          event.preventDefault();
+
+          if (
+            event.shiftKey &&
+            Math.abs(
+              event.deltaX
+            ) < 1
+          ) {
+
+            cameraX -=
+              event.deltaY;
+
+          }
+          else {
+
+            cameraX -=
+              event.deltaX;
+
+            cameraY -=
+              event.deltaY;
+
+          }
+
+          renderCamera();
+
+        },
+
+        {
+          passive: false
+        }
+      );
+
+
+      window.addEventListener(
+        'resize',
+
+        function () {
+
+          if (!isDesktop()) {
+
+            stage.style.transform =
+              'none';
+
+            dragging = false;
+
+            viewport.classList.remove(
+              'is-dragging'
+            );
+
+            return;
+
+          }
+
+          if (!initialized) {
+
+            centerOnScroll();
+
+            initialized = true;
+
+          }
+          else {
+
+            renderCamera();
+
+          }
+
+        }
+      );
+
+
+      if (isDesktop()) {
+
+        centerOnScroll();
+
+        initialized = true;
+
+      }
+
+    }
+
+  </script>
+
+
+</body>
+
+</html>

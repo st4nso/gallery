@@ -1,0 +1,1788 @@
+---
+import { projects } from '../../data/projects';
+
+const project =
+  projects.find(
+    (item) =>
+      item.slug === 'irl'
+  );
+
+if (!project) {
+  throw new Error(
+    'IRL não foi encontrado em src/data/projects.ts'
+  );
+}
+
+const hero =
+  project.hero ??
+  project.gallery[0] ??
+  '';
+
+const intro = `
+IRL acompanha um personagem pela cidade a partir de uma posição de observação à distância.
+
+Absorvido pelo celular, ele atravessa diferentes espaços sem perceber a presença da câmera. Entre vigilância, distração e registro cotidiano, o editorial transforma a distância entre fotógrafo e fotografado em parte da própria imagem.
+
+Todas as roupas e acessórios são autorais, desenvolvidos e produzidos para o editorial.
+`.trim();
+
+const images =
+  project.gallery;
+
+const totalImages =
+  images.length;
+
+const nextEditorial =
+  projects.find(
+    (item) =>
+      item.slug === 'nomofobia'
+  );
+
+const layouts = [
+  'scene-left',
+  'scene-right',
+  'scene-right-tight',
+  'scene-left-close',
+  'scene-full',
+  'scene-right',
+  'scene-left-far'
+];
+---
+
+<!doctype html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <title>
+    IRL — STANSO
+  </title>
+
+  <style>
+
+    :root {
+      --bg: #f2f2ee;
+      --ink: #11110f;
+      --muted: #7d7d77;
+      --line: rgba(17,17,15,.16);
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+
+      overflow-x: hidden;
+
+      background: var(--bg);
+
+      color: var(--ink);
+    }
+
+    body.lightbox-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    a,
+    button {
+      font: inherit;
+    }
+
+    img {
+      display: block;
+    }
+
+    button {
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      height: 64px;
+      padding: 0 28px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      border-bottom:
+        1px solid
+        rgba(17,17,15,.08);
+
+      background:
+        rgba(242,242,238,.94);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .header a {
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .brand {
+      font-weight: 630;
+    }
+
+    .back {
+      color: var(--muted);
+    }
+
+    .intro {
+      width:
+        min(
+          1540px,
+          calc(100% - 56px)
+        );
+
+      min-height:
+        calc(100vh - 64px);
+
+      margin: 0 auto;
+
+      padding:
+        70px
+        0
+        90px;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(270px,.7fr)
+        minmax(0,1.6fr);
+
+      gap:
+        clamp(60px,9vw,160px);
+
+      align-items: start;
+    }
+
+    .intro-copy {
+      position: sticky;
+
+      top: 104px;
+
+      padding-top: 5px;
+    }
+
+    .project-label {
+      margin-bottom: 24px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+
+      text-transform: uppercase;
+    }
+
+    .title {
+      margin: 0;
+
+      width: max-content;
+
+      font-size:
+        clamp(78px,8vw,145px);
+
+      line-height: .78;
+      font-weight: 580;
+      letter-spacing: -.075em;
+
+      white-space: nowrap;
+    }
+
+    .meta {
+      margin-top: 34px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .intro-text {
+      max-width: 410px;
+
+      margin:
+        54px
+        0
+        0;
+
+      white-space: pre-line;
+
+      font-size: 14px;
+      line-height: 1.55;
+      letter-spacing: -.01em;
+    }
+
+    .hero-area {
+      width: 100%;
+
+      padding-top:
+        clamp(90px,13vh,175px);
+    }
+
+    .hero-index {
+      margin-bottom: 10px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+
+      text-align: right;
+    }
+
+    .hero-button,
+    .scene-button {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      margin: 0;
+      padding: 0;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    .hero-image,
+    .scene-image {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      max-width: none;
+      max-height: none;
+
+      margin: 0;
+      padding: 0;
+
+      object-fit: contain;
+      object-position: center;
+
+      background: transparent;
+    }
+
+    .sequence-gallery {
+      width:
+        min(
+          1740px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        70px
+        0
+        170px;
+
+      border-top:
+        1px solid
+        var(--line);
+    }
+
+    .scene {
+      width: 100%;
+
+      margin:
+        0
+        0
+        clamp(120px,17vw,260px);
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scene-index {
+      margin-bottom: 9px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+      letter-spacing: .01em;
+    }
+
+    .scene-left {
+      width: 72%;
+      margin-right: auto;
+    }
+
+    .scene-right {
+      width: 70%;
+      margin-left: auto;
+    }
+
+    .scene-right-tight {
+      width: 62%;
+      margin-left: auto;
+    }
+
+    .scene-left-close {
+      width: 78%;
+      margin-right: auto;
+    }
+
+    .scene-full {
+      width: 100%;
+    }
+
+    .scene-left-far {
+      width: 64%;
+      margin-right: auto;
+    }
+
+    .scene-right .scene-index,
+    .scene-right-tight .scene-index {
+      text-align: right;
+    }
+
+    .credits {
+      width:
+        min(
+          1540px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        110px
+        0
+        125px;
+    }
+
+    .credits-label {
+      padding-top: 11px;
+      margin-bottom: 55px;
+
+      border-top:
+        1px solid
+        var(--line);
+
+      color: var(--muted);
+
+      font-size: 9px;
+    }
+
+    .credits-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(0,1fr)
+        );
+
+      gap:
+        42px
+        30px;
+    }
+
+    .credit-label {
+      margin-bottom: 5px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+
+      text-transform: uppercase;
+    }
+
+    .credit-value {
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .project-footer {
+      width:
+        min(
+          1540px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding-bottom: 70px;
+
+      border-top:
+        1px solid
+        var(--line);
+    }
+
+    .sequence-link {
+      min-height: 122px;
+
+      padding: 24px 0;
+
+      display: grid;
+
+      grid-template-columns:
+        180px
+        minmax(260px,1fr)
+        minmax(260px,.8fr)
+        28px;
+
+      column-gap: 30px;
+
+      align-items: center;
+
+      border-bottom:
+        1px solid
+        var(--line);
+
+      color: var(--ink);
+
+      text-decoration: none;
+    }
+
+    .sequence-label {
+      color: var(--muted);
+
+      font-size: 9px;
+      line-height: 1.2;
+
+      text-transform: uppercase;
+    }
+
+    .sequence-title {
+      margin: 0;
+
+      font-size:
+        clamp(22px,1.65vw,29px);
+
+      line-height: 1;
+      font-weight: 510;
+      letter-spacing: -.035em;
+
+      white-space: nowrap;
+    }
+
+    .sequence-meta {
+      justify-self: end;
+
+      max-width: 360px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+      line-height: 1.4;
+
+      text-align: right;
+    }
+
+    .sequence-arrow {
+      justify-self: end;
+
+      color: var(--muted);
+
+      font-size: 17px;
+
+      transition:
+        transform
+        .18s
+        ease;
+    }
+
+    .sequence-link:hover
+    .sequence-arrow {
+      transform:
+        translateX(4px);
+    }
+
+    /*
+    LIGHTBOX
+    */
+
+    .lightbox {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 5000;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      background:
+        rgba(0,0,0,.94);
+
+      touch-action: none;
+    }
+
+    .lightbox.is-open {
+      display: flex;
+    }
+
+    .lightbox-image {
+      display: block;
+
+      width: auto;
+      height: auto;
+
+      max-width:
+        calc(100vw - 120px);
+
+      max-height: 92vh;
+
+      object-fit: contain;
+
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .lightbox-close {
+      position: fixed;
+
+      top:
+        max(
+          15px,
+          env(safe-area-inset-top)
+        );
+
+      right:
+        max(
+          18px,
+          env(safe-area-inset-right)
+        );
+
+      z-index: 5010;
+
+      width: 45px;
+      height: 45px;
+
+      padding: 0;
+
+      border: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: transparent;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 33px;
+      line-height: 1;
+    }
+
+    .lightbox-nav {
+      position: fixed;
+
+      top: 50%;
+
+      z-index: 5010;
+
+      width: 60px;
+      height: 88px;
+
+      padding: 0;
+
+      border: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: transparent;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 34px;
+
+      opacity: .82;
+
+      transform:
+        translateY(-50%);
+    }
+
+    .lightbox-prev {
+      left: 8px;
+    }
+
+    .lightbox-next {
+      right: 8px;
+    }
+
+    .lightbox-nav[hidden] {
+      display: none;
+    }
+
+    @media (max-width:1050px) {
+
+      .intro {
+        grid-template-columns:
+          minmax(230px,.65fr)
+          minmax(0,1.35fr);
+
+        gap: 60px;
+      }
+
+      .scene-left,
+      .scene-right,
+      .scene-left-close {
+        width: 78%;
+      }
+
+      .scene-right-tight,
+      .scene-left-far {
+        width: 70%;
+      }
+
+      .sequence-link {
+        grid-template-columns:
+          120px
+          minmax(220px,1fr)
+          minmax(180px,.7fr)
+          24px;
+
+        column-gap: 22px;
+      }
+
+    }
+
+    @media (max-width:760px) {
+
+      .header {
+        height: 56px;
+        padding: 0 16px;
+      }
+
+      .intro {
+        width:
+          calc(100% - 32px);
+
+        min-height: auto;
+
+        padding:
+          58px
+          0
+          90px;
+
+        display: block;
+      }
+
+      .intro-copy {
+        position: static;
+        padding: 0;
+      }
+
+      .title {
+        font-size:
+          clamp(78px,29vw,118px);
+      }
+
+      .intro-text {
+        max-width: 100%;
+        margin-top: 45px;
+      }
+
+      .hero-area {
+        width: 100%;
+        padding-top: 90px;
+      }
+
+      .hero-button,
+      .hero-image {
+        width: 100%;
+        height: auto;
+
+        max-width: none;
+        max-height: none;
+      }
+
+      .sequence-gallery {
+        width: 100%;
+
+        padding:
+          40px
+          0
+          100px;
+      }
+
+      .scene,
+      .scene-left,
+      .scene-right,
+      .scene-right-tight,
+      .scene-left-close,
+      .scene-full,
+      .scene-left-far {
+        width: 100%;
+
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 75px;
+      }
+
+      .scene-index {
+        padding: 0 16px;
+
+        text-align:
+          left !important;
+      }
+
+      .scene-button,
+      .scene-image {
+        width: 100%;
+        height: auto;
+
+        max-width: none;
+        max-height: none;
+
+        object-fit: contain;
+      }
+
+      .credits {
+        width:
+          calc(100% - 32px);
+
+        padding:
+          80px
+          0
+          90px;
+      }
+
+      .credits-grid {
+        grid-template-columns:
+          repeat(2,1fr);
+
+        gap:
+          30px
+          20px;
+      }
+
+      .project-footer {
+        width:
+          calc(100% - 32px);
+
+        padding-bottom: 40px;
+      }
+
+      .sequence-link {
+        min-height: 118px;
+
+        padding: 20px 0;
+
+        grid-template-columns:
+          minmax(0,1fr)
+          22px;
+
+        grid-template-rows:
+          auto
+          auto
+          auto;
+
+        column-gap: 15px;
+        row-gap: 10px;
+      }
+
+      .sequence-label {
+        grid-column: 1 / -1;
+        grid-row: 1;
+
+        font-size: 8px;
+      }
+
+      .sequence-title {
+        grid-column: 1;
+        grid-row: 2;
+
+        font-size:
+          clamp(20px,5.7vw,25px);
+
+        white-space: normal;
+      }
+
+      .sequence-meta {
+        grid-column: 1;
+        grid-row: 3;
+
+        justify-self: start;
+
+        max-width: 100%;
+
+        font-size: 8px;
+
+        text-align: left;
+      }
+
+      .sequence-arrow {
+        grid-column: 2;
+        grid-row: 2;
+      }
+
+      .lightbox {
+        padding: 15px;
+      }
+
+      .lightbox-image {
+        max-width:
+          calc(100vw - 54px);
+
+        max-height: 88svh;
+      }
+
+      .lightbox-nav {
+        width: 48px;
+        height: 76px;
+
+        font-size: 27px;
+      }
+
+      .lightbox-prev {
+        left: 0;
+      }
+
+      .lightbox-next {
+        right: 0;
+      }
+
+    }
+
+    @media (max-width:470px) {
+
+      .credits-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <header class="header">
+
+    <a
+      href="/campo"
+      class="brand"
+    >
+      STANSO
+    </a>
+
+    <a
+      href="/campo"
+      class="back"
+    >
+      ← CAMPO
+    </a>
+
+  </header>
+
+
+  <main>
+
+
+    <section class="intro">
+
+      <div class="intro-copy">
+
+        <div class="project-label">
+          EDITORIAL / SCROLL
+        </div>
+
+        <h1 class="title">
+          IRL
+        </h1>
+
+        <div class="meta">
+
+          {project.year}
+
+          <br />
+
+          {
+            project.roles.join(
+              ' / '
+            )
+          }
+
+        </div>
+
+        <p class="intro-text">
+          {intro}
+        </p>
+
+      </div>
+
+
+      <div class="hero-area">
+
+        <div class="hero-index">
+          00 / 07
+        </div>
+
+        {
+          hero && (
+
+            <button
+              class="
+                hero-button
+                lightbox-trigger
+              "
+              type="button"
+              data-lightbox-src={hero}
+              data-lightbox-alt="IRL — abertura"
+            >
+
+              <img
+                class="hero-image"
+                src={hero}
+                alt="IRL — personagem observado à distância"
+              />
+
+            </button>
+
+          )
+        }
+
+      </div>
+
+    </section>
+
+
+    <section class="sequence-gallery">
+
+      {
+        images.map(
+          (
+            image,
+            index
+          ) => {
+
+            const layout =
+              layouts[index] ??
+              'scene-full';
+
+            return (
+
+              <article
+                class={`scene ${layout}`}
+              >
+
+                <div class="scene-index">
+
+                  {
+                    String(
+                      index + 1
+                    ).padStart(
+                      2,
+                      '0'
+                    )
+                  }
+
+                  &nbsp;/&nbsp;
+
+                  {
+                    String(
+                      totalImages
+                    ).padStart(
+                      2,
+                      '0'
+                    )
+                  }
+
+                </div>
+
+                <button
+                  class="
+                    scene-button
+                    lightbox-trigger
+                  "
+                  type="button"
+                  data-lightbox-src={image}
+                  data-lightbox-alt={
+                    `IRL — imagem ${index + 1}`
+                  }
+                >
+
+                  <img
+                    class="scene-image"
+                    src={image}
+                    alt={
+                      `IRL — imagem ${index + 1}`
+                    }
+                    loading="lazy"
+                  />
+
+                </button>
+
+              </article>
+
+            );
+
+          }
+        )
+      }
+
+    </section>
+
+
+    <section class="credits">
+
+      <div class="credits-label">
+        CRÉDITOS
+      </div>
+
+      <div class="credits-grid">
+
+        {
+          project.credits.map(
+            (credit) => (
+
+              <div>
+
+                <div class="credit-label">
+                  {credit.label}
+                </div>
+
+                <div class="credit-value">
+                  {credit.value}
+                </div>
+
+              </div>
+
+            )
+          )
+        }
+
+      </div>
+
+    </section>
+
+
+    <footer class="project-footer">
+
+      <a
+        href="/projetos/scroll#processo"
+        class="sequence-link"
+      >
+
+        <span class="sequence-label">
+          PROCESSO
+        </span>
+
+        <span class="sequence-title">
+          ver processo em Scroll
+        </span>
+
+        <span class="sequence-meta">
+          pesquisa / desenvolvimento / bastidores
+        </span>
+
+        <span class="sequence-arrow">
+          →
+        </span>
+
+      </a>
+
+
+      <a
+        href="/projetos/scroll"
+        class="sequence-link"
+      >
+
+        <span class="sequence-label">
+          PARTE DE
+        </span>
+
+        <span class="sequence-title">
+          SCROLL
+        </span>
+
+        <span class="sequence-meta">
+          desejo e visualidade na cultura algorítmica
+        </span>
+
+        <span class="sequence-arrow">
+          →
+        </span>
+
+      </a>
+
+
+      {
+        nextEditorial && (
+
+          <a
+            href={
+              `/projetos/${nextEditorial.slug}`
+            }
+            class="sequence-link"
+          >
+
+            <span class="sequence-label">
+              PRÓXIMO EDITORIAL
+            </span>
+
+            <span class="sequence-title">
+              {nextEditorial.title}
+            </span>
+
+            <span class="sequence-meta">
+
+              {nextEditorial.year}
+
+              &nbsp;—&nbsp;
+
+              {
+                nextEditorial.roles.join(
+                  ' / '
+                )
+              }
+
+            </span>
+
+            <span class="sequence-arrow">
+              →
+            </span>
+
+          </a>
+
+        )
+      }
+
+    </footer>
+
+  </main>
+
+
+  <div
+    class="lightbox"
+    id="lightbox"
+    aria-hidden="true"
+  >
+
+    <button
+      class="lightbox-close"
+      id="lightbox-close"
+      type="button"
+      aria-label="Fechar imagem"
+    >
+      ×
+    </button>
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-prev
+      "
+      id="lightbox-prev"
+      type="button"
+      aria-label="Imagem anterior"
+    >
+      ←
+    </button>
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-next
+      "
+      id="lightbox-next"
+      type="button"
+      aria-label="Próxima imagem"
+    >
+      →
+    </button>
+
+    <img
+      class="lightbox-image"
+      id="lightbox-image"
+      alt=""
+    />
+
+  </div>
+
+
+  <script is:inline>
+
+    var lightbox =
+      document.getElementById(
+        'lightbox'
+      );
+
+    var lightboxImage =
+      document.getElementById(
+        'lightbox-image'
+      );
+
+    var lightboxClose =
+      document.getElementById(
+        'lightbox-close'
+      );
+
+    var lightboxPrev =
+      document.getElementById(
+        'lightbox-prev'
+      );
+
+    var lightboxNext =
+      document.getElementById(
+        'lightbox-next'
+      );
+
+    var activeTriggers =
+      [];
+
+    var currentIndex =
+      -1;
+
+    var touchStartX =
+      null;
+
+    var touchStartY =
+      null;
+
+
+    function getTriggers() {
+
+      var seen =
+        new Set();
+
+      var result =
+        [];
+
+      document
+        .querySelectorAll(
+          '.lightbox-trigger'
+        )
+        .forEach(
+          function (
+            trigger
+          ) {
+
+            var src =
+              trigger.getAttribute(
+                'data-lightbox-src'
+              );
+
+            if (
+              !src ||
+              trigger.closest(
+                '[hidden]'
+              ) ||
+              seen.has(src)
+            ) {
+              return;
+            }
+
+            seen.add(src);
+
+            result.push(
+              trigger
+            );
+
+          }
+        );
+
+      return result;
+
+    }
+
+
+    function updateArrows() {
+
+      var hidden =
+        activeTriggers.length <= 1;
+
+      if (lightboxPrev) {
+        lightboxPrev.hidden =
+          hidden;
+      }
+
+      if (lightboxNext) {
+        lightboxNext.hidden =
+          hidden;
+      }
+
+    }
+
+
+    function showImage(
+      index
+    ) {
+
+      if (
+        !lightboxImage ||
+        activeTriggers.length === 0
+      ) {
+        return;
+      }
+
+      var total =
+        activeTriggers.length;
+
+      currentIndex =
+        (
+          index +
+          total
+        )
+        %
+        total;
+
+      var trigger =
+        activeTriggers[
+          currentIndex
+        ];
+
+      var src =
+        trigger.getAttribute(
+          'data-lightbox-src'
+        );
+
+      var alt =
+        trigger.getAttribute(
+          'data-lightbox-alt'
+        ) || '';
+
+      if (!src) {
+        return;
+      }
+
+      lightboxImage.setAttribute(
+        'src',
+        src
+      );
+
+      lightboxImage.setAttribute(
+        'alt',
+        alt
+      );
+
+      updateArrows();
+
+    }
+
+
+    function openLightbox(
+      trigger
+    ) {
+
+      activeTriggers =
+        getTriggers();
+
+      var src =
+        trigger.getAttribute(
+          'data-lightbox-src'
+        );
+
+      currentIndex =
+        activeTriggers.findIndex(
+          function (
+            item
+          ) {
+
+            return (
+              item.getAttribute(
+                'data-lightbox-src'
+              )
+              ===
+              src
+            );
+
+          }
+        );
+
+      if (
+        currentIndex < 0 ||
+        !lightbox
+      ) {
+        return;
+      }
+
+      showImage(
+        currentIndex
+      );
+
+      lightbox.classList.add(
+        'is-open'
+      );
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+
+      document.body.classList.add(
+        'lightbox-open'
+      );
+
+    }
+
+
+    function closeLightbox() {
+
+      if (
+        !lightbox ||
+        !lightboxImage
+      ) {
+        return;
+      }
+
+      lightbox.classList.remove(
+        'is-open'
+      );
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+      lightboxImage.removeAttribute(
+        'src'
+      );
+
+      document.body.classList.remove(
+        'lightbox-open'
+      );
+
+      activeTriggers =
+        [];
+
+      currentIndex =
+        -1;
+
+    }
+
+
+    function previousImage() {
+
+      if (
+        activeTriggers.length > 1
+      ) {
+
+        showImage(
+          currentIndex - 1
+        );
+
+      }
+
+    }
+
+
+    function nextImage() {
+
+      if (
+        activeTriggers.length > 1
+      ) {
+
+        showImage(
+          currentIndex + 1
+        );
+
+      }
+
+    }
+
+
+    document.addEventListener(
+      'click',
+      function (
+        event
+      ) {
+
+        var target =
+          event.target;
+
+        if (
+          !(target instanceof Element)
+        ) {
+          return;
+        }
+
+        var trigger =
+          target.closest(
+            '.lightbox-trigger'
+          );
+
+        if (trigger) {
+
+          event.preventDefault();
+
+          openLightbox(
+            trigger
+          );
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-prev'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          previousImage();
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-next'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          nextImage();
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-close'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          closeLightbox();
+
+          return;
+        }
+
+        if (
+          target ===
+          lightbox
+        ) {
+
+          closeLightbox();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      'keydown',
+      function (
+        event
+      ) {
+
+        if (
+          !lightbox ||
+          !lightbox.classList.contains(
+            'is-open'
+          )
+        ) {
+          return;
+        }
+
+        if (
+          event.key ===
+          'Escape'
+        ) {
+          closeLightbox();
+        }
+
+        if (
+          event.key ===
+          'ArrowLeft'
+        ) {
+          previousImage();
+        }
+
+        if (
+          event.key ===
+          'ArrowRight'
+        ) {
+          nextImage();
+        }
+
+      }
+    );
+
+
+    if (lightbox) {
+
+      lightbox.addEventListener(
+        'touchstart',
+        function (
+          event
+        ) {
+
+          if (
+            event.touches.length !== 1
+          ) {
+            return;
+          }
+
+          touchStartX =
+            event.touches[0]
+              .clientX;
+
+          touchStartY =
+            event.touches[0]
+              .clientY;
+
+        },
+        {
+          passive: true
+        }
+      );
+
+
+      lightbox.addEventListener(
+        'touchend',
+        function (
+          event
+        ) {
+
+          if (
+            touchStartX === null ||
+            touchStartY === null ||
+            event.changedTouches.length === 0
+          ) {
+            return;
+          }
+
+          var deltaX =
+            event.changedTouches[0]
+              .clientX -
+            touchStartX;
+
+          var deltaY =
+            event.changedTouches[0]
+              .clientY -
+            touchStartY;
+
+          touchStartX =
+            null;
+
+          touchStartY =
+            null;
+
+          if (
+            Math.abs(deltaX) < 45 ||
+            Math.abs(deltaX) <=
+            Math.abs(deltaY)
+          ) {
+            return;
+          }
+
+          if (
+            deltaX < 0
+          ) {
+            nextImage();
+          }
+          else {
+            previousImage();
+          }
+
+        },
+        {
+          passive: true
+        }
+      );
+
+    }
+
+
+    var pageImages =
+      document.querySelectorAll(
+        'img:not(#lightbox-image)'
+      );
+
+    pageImages.forEach(
+      function (
+        image
+      ) {
+
+        image.addEventListener(
+          'error',
+          function () {
+
+            console.error(
+              'Imagem IRL não encontrada:',
+              image.getAttribute(
+                'src'
+              )
+            );
+
+            var item =
+              image.closest(
+                '.scene'
+              );
+
+            if (item) {
+              item.style.display =
+                'none';
+            }
+            else {
+              image.style.display =
+                'none';
+            }
+
+          }
+        );
+
+      }
+    );
+
+  </script>
+
+
+</body>
+
+</html>

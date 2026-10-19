@@ -1,0 +1,2695 @@
+---
+import { projects } from '../../data/projects';
+
+const project = projects.find((item) => item.slug === 'feed');
+
+if (!project) {
+  throw new Error(
+    'FEED não foi encontrado em src/data/projects.ts'
+  );
+}
+
+const nextEditorial =
+  projects.find(
+    (item) =>
+      item.slug === 'irl'
+  );
+
+const hero =
+  project.hero ??
+  project.gallery[0] ??
+  '';
+
+const intro =
+  project.editorialIntro ??
+  project.description;
+
+const stills =
+  project.gallery;
+
+const totalStills =
+  stills.length;
+
+const advertising = [
+  {
+    src: '/images/feed/tipo reels.png',
+    label: 'SOCIAL',
+    alt: 'FEED em formato de publicação para redes sociais'
+  },
+  {
+    src: '/images/feed/ad still.png',
+    label: 'PATROCINADO',
+    alt: 'FEED apresentado como anúncio patrocinado'
+  },
+  {
+    src: '/images/feed/spotify ad.png',
+    label: 'SPOTIFY',
+    alt: 'FEED adaptado para publicidade em interface do Spotify'
+  }
+];
+---
+
+<!doctype html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <title>FEED — STANSO</title>
+
+  <style>
+
+    :root {
+      --bg: #f2f2ee;
+      --ink: #0d0d0b;
+      --muted: #777771;
+      --line: rgba(13,13,11,.16);
+      --black: #070707;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    body.lightbox-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    a,
+    button {
+      font: inherit;
+    }
+
+    button {
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    img {
+      display: block;
+    }
+
+    /*
+    ========================================================
+    HEADER
+    ========================================================
+    */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      height: 64px;
+      padding: 0 28px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      border-bottom:
+        1px solid
+        rgba(13,13,11,.08);
+
+      background:
+        rgba(242,242,238,.95);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .header a {
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .brand {
+      font-weight: 630;
+    }
+
+    .back {
+      color: var(--muted);
+    }
+
+    /*
+    ========================================================
+    HERO
+    ========================================================
+    */
+
+    .feed-hero {
+      width: 100%;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,1.62fr)
+        minmax(390px,.72fr);
+
+      align-items: stretch;
+
+      background: var(--black);
+      color: white;
+    }
+
+    .feed-hero-media {
+      position: relative;
+      min-width: 0;
+      align-self: start;
+      background: var(--bg);
+    }
+
+    .hero-lightbox {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      margin: 0;
+      padding: 0;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+
+      cursor: pointer;
+
+      text-align: left;
+    }
+
+    .feed-hero-image {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      max-width: none;
+      max-height: none;
+
+      margin: 0;
+      padding: 0;
+
+      object-fit: contain;
+      object-position: center;
+
+      background: transparent;
+    }
+
+    .feed-ad-index {
+      position: absolute;
+      top: 20px;
+      left: 22px;
+      z-index: 3;
+
+      padding: 7px 10px;
+
+      background:
+        rgba(255,255,255,.94);
+
+      color: #111;
+
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: .04em;
+
+      pointer-events: none;
+    }
+
+    .feed-hero-panel {
+      min-width: 0;
+      min-height: 100%;
+
+      padding:
+        24px
+        28px
+        30px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .feed-hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .sponsored {
+      color:
+        rgba(255,255,255,.58);
+
+      font-size: 9px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .skip {
+      padding-bottom: 3px;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.38);
+
+      color: white;
+
+      text-decoration: none;
+
+      font-size: 9px;
+    }
+
+    .feed-hero-copy {
+      padding:
+        clamp(70px,8vw,145px)
+        0;
+    }
+
+    .feed-title {
+      margin: 0;
+
+      font-size:
+        clamp(80px,9vw,160px);
+
+      line-height: .72;
+      font-weight: 580;
+      letter-spacing: -.08em;
+
+      white-space: nowrap;
+    }
+
+    .feed-meta {
+      margin-top: 28px;
+
+      color:
+        rgba(255,255,255,.52);
+
+      font-size: 9px;
+      line-height: 1.55;
+    }
+
+    .feed-description {
+      max-width: 420px;
+
+      margin:
+        42px
+        0
+        0;
+
+      font-size:
+        clamp(14px,1vw,17px);
+
+      line-height: 1.5;
+      letter-spacing: -.014em;
+    }
+
+    .feed-hero-actions {
+      display: grid;
+      gap: 9px;
+    }
+
+    .feed-cta {
+      min-height: 50px;
+      padding: 0 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.52);
+
+      color: white;
+
+      text-decoration: none;
+
+      font-size: 10px;
+    }
+
+    .feed-cta-primary {
+      border-color: white;
+      background: white;
+      color: black;
+    }
+
+    /*
+    ========================================================
+    TICKER
+    ========================================================
+    */
+
+    .ad-strip {
+      width: 100%;
+      overflow: hidden;
+
+      border-top: 1px solid #242424;
+      border-bottom: 1px solid #242424;
+
+      background: var(--black);
+      color: white;
+    }
+
+    .ad-strip-track {
+      width: max-content;
+
+      padding: 11px 0;
+
+      display: flex;
+      gap: 38px;
+
+      animation:
+        feedTicker
+        30s
+        linear
+        infinite;
+    }
+
+    .ad-strip-track span {
+      flex: 0 0 auto;
+
+      font-size: 9px;
+      letter-spacing: .065em;
+    }
+
+    @keyframes feedTicker {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /*
+    ========================================================
+    INTRO
+    ========================================================
+    */
+
+    .feed-intro {
+      width:
+        min(
+          1540px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        125px
+        0
+        145px;
+
+      display: grid;
+
+      grid-template-columns:
+        180px
+        minmax(0,1fr);
+
+      gap: 40px;
+
+      border-bottom:
+        1px solid
+        var(--line);
+    }
+
+    .feed-intro-label {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .feed-intro-text {
+      width:
+        min(
+          760px,
+          100%
+        );
+
+      margin:
+        0
+        0
+        0
+        auto;
+
+      white-space: pre-line;
+
+      font-size:
+        clamp(19px,1.7vw,28px);
+
+      line-height: 1.32;
+      letter-spacing: -.03em;
+    }
+
+    /*
+    ========================================================
+    STREAM
+    ========================================================
+    */
+
+    .feed-stream {
+      width:
+        min(
+          1180px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        110px
+        0
+        160px;
+    }
+
+    .stream-heading {
+      margin-bottom: 55px;
+
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+
+      gap: 25px;
+    }
+
+    .stream-heading span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .stream-heading strong {
+      font-size: 10px;
+      font-weight: 520;
+    }
+
+    /*
+    ========================================================
+    CARDS
+    ========================================================
+    */
+
+    .ad-card {
+      width: 100%;
+      max-width: none;
+
+      margin:
+        0
+        0
+        90px;
+
+      padding: 0;
+
+      border-top:
+        1px solid
+        var(--line);
+
+      border-bottom:
+        1px solid
+        var(--line);
+
+      background: transparent;
+    }
+
+    .ad-card:nth-child(even),
+    .ad-card:nth-child(odd) {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .ad-card-head {
+      min-height: 58px;
+
+      padding: 0 4px;
+
+      display: grid;
+
+      grid-template-columns:
+        36px
+        minmax(0,1fr)
+        auto;
+
+      gap: 11px;
+      align-items: center;
+    }
+
+    .ad-avatar {
+      width: 31px;
+      height: 31px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border:
+        1px solid
+        var(--ink);
+
+      border-radius: 50%;
+
+      font-size: 9px;
+      font-weight: 620;
+    }
+
+    .ad-account {
+      min-width: 0;
+    }
+
+    .ad-account strong {
+      display: block;
+      font-size: 10px;
+      font-weight: 620;
+    }
+
+    .ad-account small {
+      display: block;
+
+      margin-top: 2px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+    }
+
+    .ad-number {
+      color: var(--muted);
+      font-size: 8px;
+    }
+
+    .ad-card-media {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      max-width: none;
+      max-height: none;
+
+      margin: 0;
+      padding: 0;
+
+      overflow: visible;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    .ad-card-media img {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      max-width: none;
+      max-height: none;
+
+      margin: 0;
+      padding: 0;
+
+      object-fit: contain;
+      object-position: center;
+
+      background: transparent;
+    }
+
+    .ad-card-foot {
+      min-height: 58px;
+
+      padding: 0 4px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .ad-card-foot span {
+      color: var(--muted);
+      font-size: 8px;
+    }
+
+    .ad-open {
+      padding: 0;
+
+      border: 0;
+
+      border-bottom:
+        1px solid
+        rgba(13,13,11,.32);
+
+      background: transparent;
+
+      color: var(--ink);
+
+      cursor: pointer;
+
+      font-size: 9px;
+    }
+
+    /*
+    ========================================================
+    BREAK
+    ========================================================
+    */
+
+    .feed-break {
+      width: 100%;
+
+      margin:
+        30px
+        0
+        120px;
+
+      padding:
+        22px
+        28px;
+
+      display: flex;
+      justify-content: space-between;
+
+      gap: 30px;
+
+      background: var(--black);
+      color: white;
+    }
+
+    .feed-break span {
+      font-size: 9px;
+      letter-spacing: .06em;
+    }
+
+    /*
+    ========================================================
+    CIRCULAÇÃO
+    ========================================================
+    */
+
+    .circulation {
+      padding:
+        130px
+        28px
+        160px;
+
+      background: var(--black);
+      color: white;
+    }
+
+    .circulation-inner {
+      width:
+        min(
+          1540px,
+          100%
+        );
+
+      margin: 0 auto;
+    }
+
+    .circulation-head {
+      padding-top: 12px;
+      margin-bottom: 90px;
+
+      display: grid;
+
+      grid-template-columns:
+        180px
+        minmax(0,1fr);
+
+      gap: 30px;
+
+      border-top:
+        1px solid
+        rgba(255,255,255,.22);
+    }
+
+    .circulation-head span {
+      color:
+        rgba(255,255,255,.48);
+
+      font-size: 9px;
+    }
+
+    .circulation-head h2 {
+      margin: 0;
+
+      font-size:
+        clamp(43px,5vw,82px);
+
+      line-height: .88;
+      font-weight: 520;
+      letter-spacing: -.055em;
+    }
+
+    .circulation-copy {
+      width:
+        min(
+          630px,
+          100%
+        );
+
+      margin:
+        0
+        0
+        90px
+        auto;
+
+      color:
+        rgba(255,255,255,.68);
+
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .platform-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap: 22px;
+      align-items: start;
+    }
+
+    .platform-card {
+      width: 100%;
+      margin: 0;
+    }
+
+    .platform-label {
+      margin-bottom: 10px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+
+      color:
+        rgba(255,255,255,.52);
+
+      font-size: 8px;
+    }
+
+    .platform-image {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      margin: 0;
+      padding: 0;
+
+      border: 0;
+
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    .platform-image img {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      max-width: none;
+      max-height: none;
+
+      object-fit: contain;
+
+      background: transparent;
+    }
+
+    /*
+    ========================================================
+    CRÉDITOS
+    ========================================================
+    */
+
+    .credits {
+      width:
+        min(
+          1540px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        110px
+        0
+        120px;
+    }
+
+    .credits-label {
+      padding-top: 11px;
+      margin-bottom: 50px;
+
+      border-top:
+        1px solid
+        var(--line);
+
+      color: var(--muted);
+
+      font-size: 9px;
+    }
+
+    .credits-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(0,1fr)
+        );
+
+      gap:
+        40px
+        30px;
+    }
+
+    .credit-label {
+      margin-bottom: 5px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+
+      text-transform: uppercase;
+    }
+
+    .credit-value {
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    /*
+    ========================================================
+    SEQUÊNCIA
+    ========================================================
+    */
+
+    .sequence {
+      width:
+        min(
+          1540px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding-bottom: 70px;
+
+      border-top:
+        1px solid
+        var(--line);
+    }
+
+    .sequence-link {
+      min-height: 122px;
+
+      padding: 24px 0;
+
+      display: grid;
+
+      grid-template-columns:
+        180px
+        minmax(260px,1fr)
+        minmax(260px,.8fr)
+        28px;
+
+      column-gap: 30px;
+
+      align-items: center;
+
+      border-bottom:
+        1px solid
+        var(--line);
+
+      color: var(--ink);
+
+      text-decoration: none;
+    }
+
+    .sequence-label {
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .sequence-title {
+      font-size:
+        clamp(22px,1.65vw,29px);
+
+      line-height: 1;
+      font-weight: 510;
+      letter-spacing: -.035em;
+
+      white-space: nowrap;
+    }
+
+    .sequence-meta {
+      justify-self: end;
+
+      max-width: 360px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+      line-height: 1.4;
+
+      text-align: right;
+    }
+
+    .sequence-arrow {
+      justify-self: end;
+
+      color: var(--muted);
+
+      font-size: 17px;
+
+      transition:
+        transform
+        .18s
+        ease;
+    }
+
+    .sequence-link:hover .sequence-arrow {
+      transform: translateX(4px);
+    }
+
+    /*
+    ========================================================
+    LIGHTBOX
+    ========================================================
+    */
+
+    .lightbox {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 5000;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      background:
+        rgba(0,0,0,.94);
+
+      touch-action: none;
+      overscroll-behavior: contain;
+    }
+
+    .lightbox.is-open {
+      display: flex;
+    }
+
+    .lightbox-image {
+      display: block;
+
+      width: auto;
+      height: auto;
+
+      max-width:
+        calc(100vw - 120px);
+
+      max-height: 92vh;
+
+      object-fit: contain;
+
+      background: transparent;
+
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .lightbox-close {
+      position: fixed;
+
+      top:
+        max(
+          15px,
+          env(safe-area-inset-top)
+        );
+
+      right:
+        max(
+          18px,
+          env(safe-area-inset-right)
+        );
+
+      z-index: 5010;
+
+      width: 45px;
+      height: 45px;
+
+      padding: 0;
+
+      border: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: transparent;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 33px;
+      line-height: 1;
+    }
+
+    .lightbox-nav {
+      position: fixed;
+
+      top: 50%;
+
+      z-index: 5010;
+
+      width: 60px;
+      height: 88px;
+
+      padding: 0;
+
+      border: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: transparent;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 34px;
+      line-height: 1;
+
+      opacity: .82;
+
+      transform:
+        translateY(-50%);
+
+      transition:
+        opacity
+        .18s
+        ease;
+    }
+
+    .lightbox-nav:hover {
+      opacity: 1;
+    }
+
+    .lightbox-prev {
+      left: 8px;
+    }
+
+    .lightbox-next {
+      right: 8px;
+    }
+
+    .lightbox-nav[hidden] {
+      display: none;
+    }
+
+    /*
+    ========================================================
+    TABLET
+    ========================================================
+    */
+
+    @media (max-width:1050px) {
+
+      .feed-hero {
+        grid-template-columns:
+          minmax(0,1.2fr)
+          minmax(360px,.8fr);
+      }
+
+      .sequence-link {
+        grid-template-columns:
+          120px
+          minmax(210px,1fr)
+          minmax(180px,.7fr)
+          24px;
+
+        column-gap: 20px;
+      }
+
+    }
+
+    /*
+    ========================================================
+    MOBILE
+    ========================================================
+    */
+
+    @media (max-width:760px) {
+
+      .header {
+        height: 56px;
+        padding: 0 16px;
+      }
+
+      .feed-hero {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .feed-hero-media,
+      .hero-lightbox,
+      .feed-hero-image {
+        width: 100%;
+        height: auto;
+      }
+
+      .feed-hero-image {
+        max-width: none;
+        max-height: none;
+
+        object-fit: contain;
+      }
+
+      .feed-hero-panel {
+        min-height: 0;
+
+        padding:
+          22px
+          16px
+          18px;
+      }
+
+      .feed-hero-copy {
+        padding: 70px 0;
+      }
+
+      .feed-title {
+        font-size:
+          clamp(72px,27vw,120px);
+      }
+
+      .feed-description {
+        max-width: 100%;
+        font-size: 15px;
+      }
+
+      .feed-intro {
+        width:
+          calc(100% - 32px);
+
+        padding:
+          80px
+          0
+          95px;
+
+        display: block;
+      }
+
+      .feed-intro-label {
+        display: block;
+        margin-bottom: 42px;
+      }
+
+      .feed-intro-text {
+        width: 100%;
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .feed-stream {
+        width: 100%;
+        margin: 0;
+
+        padding:
+          80px
+          0
+          100px;
+      }
+
+      .stream-heading {
+        width:
+          calc(100% - 32px);
+
+        margin:
+          0
+          auto
+          40px;
+      }
+
+      .ad-card,
+      .ad-card:nth-child(even),
+      .ad-card:nth-child(odd) {
+        width: 100%;
+
+        margin:
+          0
+          0
+          55px;
+
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .ad-card-head,
+      .ad-card-foot {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .ad-card-media,
+      .ad-card-media img {
+        width: 100%;
+        height: auto;
+
+        max-width: none;
+        max-height: none;
+
+        object-fit: contain;
+      }
+
+      .feed-break {
+        margin-bottom: 80px;
+
+        padding:
+          18px
+          16px;
+      }
+
+      .circulation {
+        padding:
+          90px
+          16px
+          110px;
+      }
+
+      .circulation-head {
+        grid-template-columns: 1fr;
+
+        gap: 28px;
+
+        margin-bottom: 55px;
+      }
+
+      .circulation-head h2 {
+        font-size:
+          clamp(42px,14vw,70px);
+      }
+
+      .circulation-copy {
+        margin:
+          0
+          0
+          60px;
+      }
+
+      .platform-grid {
+        grid-template-columns: 1fr;
+
+        gap: 60px;
+      }
+
+      .platform-image,
+      .platform-image img {
+        width: 100%;
+        height: auto;
+
+        max-width: none;
+        max-height: none;
+
+        object-fit: contain;
+      }
+
+      .credits {
+        width:
+          calc(100% - 32px);
+
+        padding:
+          80px
+          0
+          90px;
+      }
+
+      .credits-grid {
+        grid-template-columns:
+          repeat(2,1fr);
+
+        gap:
+          30px
+          20px;
+      }
+
+      .sequence {
+        width:
+          calc(100% - 32px);
+
+        padding-bottom: 40px;
+      }
+
+      .sequence-link {
+        min-height: 118px;
+
+        padding: 20px 0;
+
+        grid-template-columns:
+          minmax(0,1fr)
+          22px;
+
+        grid-template-rows:
+          auto
+          auto
+          auto;
+
+        column-gap: 15px;
+        row-gap: 10px;
+      }
+
+      .sequence-label {
+        grid-column: 1 / -1;
+        grid-row: 1;
+
+        font-size: 8px;
+      }
+
+      .sequence-title {
+        grid-column: 1;
+        grid-row: 2;
+
+        font-size:
+          clamp(20px,5.7vw,25px);
+
+        white-space: normal;
+      }
+
+      .sequence-meta {
+        grid-column: 1;
+        grid-row: 3;
+
+        justify-self: start;
+
+        max-width: 100%;
+
+        font-size: 8px;
+
+        text-align: left;
+      }
+
+      .sequence-arrow {
+        grid-column: 2;
+        grid-row: 2;
+      }
+
+      .lightbox {
+        padding: 15px;
+      }
+
+      .lightbox-image {
+        max-width:
+          calc(100vw - 54px);
+
+        max-height: 88svh;
+      }
+
+      .lightbox-nav {
+        width: 48px;
+        height: 76px;
+
+        font-size: 27px;
+      }
+
+      .lightbox-prev {
+        left: 0;
+      }
+
+      .lightbox-next {
+        right: 0;
+      }
+
+    }
+
+    @media (max-width:470px) {
+
+      .credits-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      .ad-strip-track {
+        animation: none;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <header class="header">
+
+    <a
+      href="/campo"
+      class="brand"
+    >
+      STANSO
+    </a>
+
+    <a
+      href="/campo"
+      class="back"
+    >
+      ← CAMPO
+    </a>
+
+  </header>
+
+
+  <main>
+
+
+    <section class="feed-hero">
+
+
+      <div class="feed-hero-media">
+
+        <span class="feed-ad-index">
+          AD 00 / FEED
+        </span>
+
+        {
+          hero && (
+
+            <button
+              class="
+                hero-lightbox
+                lightbox-trigger
+              "
+              type="button"
+              data-lightbox-src={hero}
+              data-lightbox-alt="FEED"
+            >
+
+              <img
+                class="feed-hero-image"
+                src={hero}
+                alt="FEED"
+              />
+
+            </button>
+
+          )
+        }
+
+      </div>
+
+
+      <div class="feed-hero-panel">
+
+        <div class="feed-hero-top">
+
+          <span class="sponsored">
+            PATROCINADO
+          </span>
+
+          <a
+            href="#feed-stills"
+            class="skip"
+          >
+            PULAR ANÚNCIO →
+          </a>
+
+        </div>
+
+
+        <div class="feed-hero-copy">
+
+          <h1 class="feed-title">
+            FEED
+          </h1>
+
+          <div class="feed-meta">
+
+            {project.year}
+
+            <br />
+
+            {
+              project.roles.join(
+                ' / '
+              )
+            }
+
+          </div>
+
+          <p class="feed-description">
+            {project.description}
+          </p>
+
+        </div>
+
+
+        <div class="feed-hero-actions">
+
+          <a
+            href="#feed-stills"
+            class="
+              feed-cta
+              feed-cta-primary
+            "
+          >
+            <span>
+              VER CAMPANHA
+            </span>
+
+            <span>
+              ↓
+            </span>
+          </a>
+
+          <a
+            href="#circulacao"
+            class="feed-cta"
+          >
+            <span>
+              VER PUBLICIDADE
+            </span>
+
+            <span>
+              ↓
+            </span>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <div class="ad-strip">
+
+      <div class="ad-strip-track">
+
+        <span>ADVERTISEMENT</span>
+        <span>FEED</span>
+        <span>PATROCINADO</span>
+        <span>SHOP THE IMAGE</span>
+        <span>SCROLL</span>
+        <span>PUBLICIDADE</span>
+        <span>IMAGEM / PRODUTO / DESEJO</span>
+
+        <span>ADVERTISEMENT</span>
+        <span>FEED</span>
+        <span>PATROCINADO</span>
+        <span>SHOP THE IMAGE</span>
+        <span>SCROLL</span>
+        <span>PUBLICIDADE</span>
+        <span>IMAGEM / PRODUTO / DESEJO</span>
+
+      </div>
+
+    </div>
+
+
+    <section class="feed-intro">
+
+      <span class="feed-intro-label">
+        SOBRE
+      </span>
+
+      <p class="feed-intro-text">
+        {intro}
+      </p>
+
+    </section>
+
+
+    <section
+      class="feed-stream"
+      id="feed-stills"
+    >
+
+      <header class="stream-heading">
+
+        <span>
+          CONTEÚDO PATROCINADO
+        </span>
+
+        <strong>
+
+          {totalStills}
+
+          {
+            totalStills === 1
+              ? ' POST'
+              : ' POSTS'
+          }
+
+        </strong>
+
+      </header>
+
+
+      {
+        stills.map(
+          (
+            image,
+            index
+          ) => (
+
+            <div>
+
+              <article class="ad-card">
+
+                <div class="ad-card-head">
+
+                  <div class="ad-avatar">
+                    S
+                  </div>
+
+                  <div class="ad-account">
+
+                    <strong>
+                      SCROLL
+                    </strong>
+
+                    <small>
+                      Patrocinado
+                    </small>
+
+                  </div>
+
+                  <span class="ad-number">
+
+                    {
+                      String(
+                        index + 1
+                      ).padStart(
+                        2,
+                        '0'
+                      )
+                    }
+
+                    &nbsp;/&nbsp;
+
+                    {
+                      String(
+                        totalStills
+                      ).padStart(
+                        2,
+                        '0'
+                      )
+                    }
+
+                  </span>
+
+                </div>
+
+
+                <button
+                  class="
+                    ad-card-media
+                    lightbox-trigger
+                  "
+                  type="button"
+                  data-lightbox-src={image}
+                  data-lightbox-alt={
+                    `FEED — still ${index + 1}`
+                  }
+                >
+
+                  <img
+                    src={image}
+                    alt={
+                      `FEED — still ${index + 1}`
+                    }
+                    loading="lazy"
+                  />
+
+                </button>
+
+
+                <div class="ad-card-foot">
+
+                  <span>
+
+                    FEED / STILL {
+
+                      String(
+                        index + 1
+                      ).padStart(
+                        2,
+                        '0'
+                      )
+
+                    }
+
+                  </span>
+
+                  <button
+                    class="
+                      ad-open
+                      lightbox-trigger
+                    "
+                    type="button"
+                    data-lightbox-src={image}
+                    data-lightbox-alt={
+                      `FEED — still ${index + 1}`
+                    }
+                  >
+                    ABRIR IMAGEM ↗
+                  </button>
+
+                </div>
+
+              </article>
+
+
+              {
+                index ===
+                  Math.floor(
+                    totalStills / 2
+                  ) - 1
+                && (
+
+                  <div class="feed-break">
+
+                    <span>
+                      PUBLICIDADE
+                    </span>
+
+                    <span>
+                      CONTINUAR ROLANDO ↓
+                    </span>
+
+                    <span>
+                      FEED / SCROLL
+                    </span>
+
+                  </div>
+
+                )
+              }
+
+            </div>
+
+          )
+        )
+      }
+
+    </section>
+
+
+    <section
+      class="circulation"
+      id="circulacao"
+    >
+
+      <div class="circulation-inner">
+
+        <header class="circulation-head">
+
+          <span>
+            CIRCULAÇÃO
+          </span>
+
+          <h2>
+            <br />
+          </h2>
+
+        </header>
+
+
+        <p class="circulation-copy">
+          O still deixa de aparecer como imagem isolada e entra em estruturas de circulação que já carregam linguagem, chamada, interface e intenção comercial.
+        </p>
+
+
+        <div class="platform-grid">
+
+          {
+            advertising.map(
+              (
+                item,
+                index
+              ) => (
+
+                <figure class="platform-card">
+
+                  <figcaption class="platform-label">
+
+                    <span>
+                      FEED / {item.label}
+                    </span>
+
+                    <span>
+
+                      AD {
+
+                        String(
+                          index + 1
+                        ).padStart(
+                          2,
+                          '0'
+                        )
+
+                      }
+
+                    </span>
+
+                  </figcaption>
+
+
+                  <button
+                    class="
+                      platform-image
+                      lightbox-trigger
+                    "
+                    type="button"
+                    data-lightbox-src={item.src}
+                    data-lightbox-alt={item.alt}
+                  >
+
+                    <img
+                      src={item.src}
+                      alt={item.alt}
+                      loading="lazy"
+                    />
+
+                  </button>
+
+                </figure>
+
+              )
+            )
+          }
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="credits">
+
+      <div class="credits-label">
+        CRÉDITOS
+      </div>
+
+      <div class="credits-grid">
+
+        {
+          project.credits.map(
+            (credit) => (
+
+              <div>
+
+                <div class="credit-label">
+                  {credit.label}
+                </div>
+
+                <div class="credit-value">
+                  {credit.value}
+                </div>
+
+              </div>
+
+            )
+          )
+        }
+
+      </div>
+
+    </section>
+
+
+    <footer class="sequence">
+
+      <a
+        href="/projetos/scroll#processo"
+        class="sequence-link"
+      >
+
+        <span class="sequence-label">
+          PROCESSO
+        </span>
+
+        <span class="sequence-title">
+          ver processo em Scroll
+        </span>
+
+        <span class="sequence-meta">
+          pesquisa / desenvolvimento / bastidores
+        </span>
+
+        <span class="sequence-arrow">
+          →
+        </span>
+
+      </a>
+
+
+      <a
+        href="/projetos/scroll"
+        class="sequence-link"
+      >
+
+        <span class="sequence-label">
+          PARTE DE
+        </span>
+
+        <span class="sequence-title">
+          SCROLL
+        </span>
+
+        <span class="sequence-meta">
+          desejo e visualidade na cultura algorítmica
+        </span>
+
+        <span class="sequence-arrow">
+          →
+        </span>
+
+      </a>
+
+
+      {
+        nextEditorial && (
+
+          <a
+            href={
+              `/projetos/${nextEditorial.slug}`
+            }
+            class="sequence-link"
+          >
+
+            <span class="sequence-label">
+              PRÓXIMO EDITORIAL
+            </span>
+
+            <span class="sequence-title">
+              {nextEditorial.title}
+            </span>
+
+            <span class="sequence-meta">
+
+              {nextEditorial.year}
+
+              &nbsp;—&nbsp;
+
+              {
+                nextEditorial.roles.join(
+                  ' / '
+                )
+              }
+
+            </span>
+
+            <span class="sequence-arrow">
+              →
+            </span>
+
+          </a>
+
+        )
+      }
+
+    </footer>
+
+  </main>
+
+
+  <div
+    class="lightbox"
+    id="lightbox"
+    aria-hidden="true"
+  >
+
+    <button
+      class="lightbox-close"
+      id="lightbox-close"
+      type="button"
+      aria-label="Fechar imagem"
+    >
+      ×
+    </button>
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-prev
+      "
+      id="lightbox-prev"
+      type="button"
+      aria-label="Imagem anterior"
+    >
+      ←
+    </button>
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-next
+      "
+      id="lightbox-next"
+      type="button"
+      aria-label="Próxima imagem"
+    >
+      →
+    </button>
+
+    <img
+      class="lightbox-image"
+      id="lightbox-image"
+      alt=""
+    />
+
+  </div>
+
+
+  <script is:inline>
+
+    var lightbox =
+      document.getElementById(
+        'lightbox'
+      );
+
+    var lightboxImage =
+      document.getElementById(
+        'lightbox-image'
+      );
+
+    var lightboxClose =
+      document.getElementById(
+        'lightbox-close'
+      );
+
+    var lightboxPrev =
+      document.getElementById(
+        'lightbox-prev'
+      );
+
+    var lightboxNext =
+      document.getElementById(
+        'lightbox-next'
+      );
+
+    var activeTriggers =
+      [];
+
+    var currentIndex =
+      -1;
+
+    var touchStartX =
+      null;
+
+    var touchStartY =
+      null;
+
+
+    function getTriggers() {
+
+      var seen =
+        new Set();
+
+      var result =
+        [];
+
+      document
+        .querySelectorAll(
+          '.lightbox-trigger'
+        )
+        .forEach(
+          function (
+            trigger
+          ) {
+
+            var src =
+              trigger.getAttribute(
+                'data-lightbox-src'
+              );
+
+            if (
+              !src ||
+              trigger.closest(
+                '[hidden]'
+              ) ||
+              seen.has(src)
+            ) {
+              return;
+            }
+
+            seen.add(src);
+
+            result.push(
+              trigger
+            );
+
+          }
+        );
+
+      return result;
+
+    }
+
+
+    function updateArrows() {
+
+      var hidden =
+        activeTriggers.length <= 1;
+
+      if (lightboxPrev) {
+        lightboxPrev.hidden =
+          hidden;
+      }
+
+      if (lightboxNext) {
+        lightboxNext.hidden =
+          hidden;
+      }
+
+    }
+
+
+    function showImage(
+      index
+    ) {
+
+      if (
+        !lightboxImage ||
+        activeTriggers.length === 0
+      ) {
+        return;
+      }
+
+      var total =
+        activeTriggers.length;
+
+      currentIndex =
+        (
+          index +
+          total
+        )
+        %
+        total;
+
+      var trigger =
+        activeTriggers[
+          currentIndex
+        ];
+
+      var src =
+        trigger.getAttribute(
+          'data-lightbox-src'
+        );
+
+      var alt =
+        trigger.getAttribute(
+          'data-lightbox-alt'
+        ) || '';
+
+      if (!src) {
+        return;
+      }
+
+      lightboxImage.setAttribute(
+        'src',
+        src
+      );
+
+      lightboxImage.setAttribute(
+        'alt',
+        alt
+      );
+
+      updateArrows();
+
+    }
+
+
+    function openLightbox(
+      trigger
+    ) {
+
+      if (
+        !lightbox ||
+        !lightboxImage
+      ) {
+        return;
+      }
+
+      activeTriggers =
+        getTriggers();
+
+      var src =
+        trigger.getAttribute(
+          'data-lightbox-src'
+        );
+
+      currentIndex =
+        activeTriggers.findIndex(
+          function (
+            item
+          ) {
+
+            return (
+              item.getAttribute(
+                'data-lightbox-src'
+              )
+              ===
+              src
+            );
+
+          }
+        );
+
+      if (
+        currentIndex < 0
+      ) {
+        return;
+      }
+
+      showImage(
+        currentIndex
+      );
+
+      lightbox.classList.add(
+        'is-open'
+      );
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+
+      document.body.classList.add(
+        'lightbox-open'
+      );
+
+    }
+
+
+    function closeLightbox() {
+
+      if (
+        !lightbox ||
+        !lightboxImage
+      ) {
+        return;
+      }
+
+      lightbox.classList.remove(
+        'is-open'
+      );
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+      lightboxImage.removeAttribute(
+        'src'
+      );
+
+      lightboxImage.setAttribute(
+        'alt',
+        ''
+      );
+
+      document.body.classList.remove(
+        'lightbox-open'
+      );
+
+      activeTriggers =
+        [];
+
+      currentIndex =
+        -1;
+
+    }
+
+
+    function previousImage() {
+
+      if (
+        activeTriggers.length <= 1
+      ) {
+        return;
+      }
+
+      showImage(
+        currentIndex - 1
+      );
+
+    }
+
+
+    function nextImage() {
+
+      if (
+        activeTriggers.length <= 1
+      ) {
+        return;
+      }
+
+      showImage(
+        currentIndex + 1
+      );
+
+    }
+
+
+    document.addEventListener(
+      'click',
+      function (
+        event
+      ) {
+
+        var target =
+          event.target;
+
+        if (
+          !(target instanceof Element)
+        ) {
+          return;
+        }
+
+        var trigger =
+          target.closest(
+            '.lightbox-trigger'
+          );
+
+        if (trigger) {
+
+          event.preventDefault();
+
+          openLightbox(
+            trigger
+          );
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-prev'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          previousImage();
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-next'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          nextImage();
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-close'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          closeLightbox();
+
+          return;
+        }
+
+        if (
+          target ===
+          lightbox
+        ) {
+
+          closeLightbox();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      'keydown',
+      function (
+        event
+      ) {
+
+        if (
+          !lightbox ||
+          !lightbox.classList.contains(
+            'is-open'
+          )
+        ) {
+          return;
+        }
+
+        if (
+          event.key ===
+          'Escape'
+        ) {
+          closeLightbox();
+        }
+
+        if (
+          event.key ===
+          'ArrowLeft'
+        ) {
+
+          event.preventDefault();
+
+          previousImage();
+
+        }
+
+        if (
+          event.key ===
+          'ArrowRight'
+        ) {
+
+          event.preventDefault();
+
+          nextImage();
+
+        }
+
+      }
+    );
+
+
+    if (lightbox) {
+
+      lightbox.addEventListener(
+        'touchstart',
+        function (
+          event
+        ) {
+
+          if (
+            event.touches.length !== 1
+          ) {
+            return;
+          }
+
+          touchStartX =
+            event.touches[0]
+              .clientX;
+
+          touchStartY =
+            event.touches[0]
+              .clientY;
+
+        },
+        {
+          passive: true
+        }
+      );
+
+
+      lightbox.addEventListener(
+        'touchend',
+        function (
+          event
+        ) {
+
+          if (
+            touchStartX === null ||
+            touchStartY === null ||
+            event.changedTouches.length === 0
+          ) {
+            return;
+          }
+
+          var endX =
+            event.changedTouches[0]
+              .clientX;
+
+          var endY =
+            event.changedTouches[0]
+              .clientY;
+
+          var deltaX =
+            endX -
+            touchStartX;
+
+          var deltaY =
+            endY -
+            touchStartY;
+
+          touchStartX =
+            null;
+
+          touchStartY =
+            null;
+
+          if (
+            Math.abs(deltaX) < 45 ||
+            Math.abs(deltaX) <=
+            Math.abs(deltaY)
+          ) {
+            return;
+          }
+
+          if (
+            deltaX < 0
+          ) {
+            nextImage();
+          }
+          else {
+            previousImage();
+          }
+
+        },
+        {
+          passive: true
+        }
+      );
+
+    }
+
+
+    var pageImages =
+      document.querySelectorAll(
+        'img:not(#lightbox-image)'
+      );
+
+    pageImages.forEach(
+      function (
+        image
+      ) {
+
+        image.addEventListener(
+          'error',
+          function () {
+
+            console.error(
+              'Imagem FEED não encontrada:',
+              image.getAttribute(
+                'src'
+              )
+            );
+
+            var item =
+              image.closest(
+                '.ad-card, .platform-card'
+              );
+
+            if (item) {
+              item.style.display =
+                'none';
+            }
+            else {
+              image.style.display =
+                'none';
+            }
+
+          }
+        );
+
+      }
+    );
+
+  </script>
+
+
+</body>
+
+</html>

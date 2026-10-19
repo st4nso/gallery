@@ -1,0 +1,1437 @@
+---
+import { projects } from '../../data/projects';
+
+const project =
+  projects.find(
+    (item) =>
+      item.slug === 'sem-doc'
+  );
+
+if (!project) {
+  throw new Error(
+    'SEM DOC não foi encontrado em src/data/projects.ts'
+  );
+}
+
+const hero =
+  project.hero ??
+  project.gallery[0] ??
+  '';
+
+const images =
+  project.gallery;
+
+const nextProject =
+  projects.find(
+    (item) =>
+      item.slug === project.nextProject
+  );
+---
+
+<!doctype html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <title>
+    SEM DOC — STANSO
+  </title>
+
+  <style>
+
+    :root {
+      --bg: #f2f2ee;
+      --ink: #11110f;
+      --muted: #7d7d77;
+      --line: rgba(17,17,15,.16);
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    body.lightbox-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    img {
+      display: block;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      height: 64px;
+      padding: 0 28px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      border-bottom:
+        1px solid
+        rgba(17,17,15,.08);
+
+      background:
+        rgba(242,242,238,.95);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .header a {
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .brand {
+      font-weight: 630;
+    }
+
+    .back {
+      color: var(--muted);
+    }
+
+    .project-head {
+      width:
+        min(
+          1180px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        85px
+        0
+        70px;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(260px,.65fr)
+        minmax(0,1.35fr);
+
+      gap: 70px;
+
+      align-items: start;
+    }
+
+    .project-info {
+      padding-top: 5px;
+    }
+
+    .project-type {
+      margin-bottom: 20px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+
+      text-transform: uppercase;
+    }
+
+    .project-title {
+      margin: 0;
+
+      width: max-content;
+
+      font-size:
+        clamp(50px,5vw,82px);
+
+      line-height: .86;
+      font-weight: 570;
+      letter-spacing: -.06em;
+
+      white-space: nowrap;
+    }
+
+    .project-meta {
+      margin-top: 28px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .hero {
+      width:
+        min(
+          620px,
+          100%
+        );
+
+      margin-left: auto;
+    }
+
+    .hero-button,
+    .photo-button {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      margin: 0;
+      padding: 0;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    .hero-image,
+    .photo-image {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      max-width: 100%;
+      max-height: none;
+
+      margin: 0;
+
+      object-fit: contain;
+
+      background: transparent;
+    }
+
+    .gallery {
+      width:
+        min(
+          1180px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        85px
+        0
+        130px;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0,1fr)
+        );
+
+      gap:
+        70px
+        48px;
+
+      border-top:
+        1px solid
+        var(--line);
+    }
+
+    .photo {
+      width: 100%;
+      margin: 0;
+    }
+
+    .credits {
+      width:
+        min(
+          1180px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding:
+        90px
+        0
+        110px;
+
+      border-top:
+        1px solid
+        var(--line);
+    }
+
+    .credits-title {
+      margin-bottom: 45px;
+
+      color: var(--muted);
+
+      font-size: 9px;
+    }
+
+    .credits-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(0,1fr)
+        );
+
+      gap:
+        35px
+        30px;
+    }
+
+    .credit-label {
+      margin-bottom: 5px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+
+      text-transform: uppercase;
+    }
+
+    .credit-value {
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .project-footer {
+      width:
+        min(
+          1180px,
+          calc(100% - 56px)
+        );
+
+      margin: 0 auto;
+
+      padding-bottom: 70px;
+
+      border-top:
+        1px solid
+        var(--line);
+    }
+
+    .footer-link {
+      min-height: 105px;
+
+      padding: 22px 0;
+
+      display: grid;
+
+      grid-template-columns:
+        150px
+        minmax(0,1fr)
+        auto;
+
+      gap: 30px;
+
+      align-items: center;
+
+      border-bottom:
+        1px solid
+        var(--line);
+
+      text-decoration: none;
+    }
+
+    .footer-label {
+      color: var(--muted);
+
+      font-size: 9px;
+
+      text-transform: uppercase;
+    }
+
+    .footer-title {
+      font-size:
+        clamp(20px,1.6vw,27px);
+
+      line-height: 1;
+      font-weight: 510;
+      letter-spacing: -.03em;
+    }
+
+    .footer-arrow {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /*
+    LIGHTBOX
+    */
+
+    .lightbox {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 5000;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      background:
+        rgba(0,0,0,.95);
+
+      touch-action: none;
+    }
+
+    .lightbox.is-open {
+      display: flex;
+    }
+
+    .lightbox-image {
+      display: block;
+
+      width: auto;
+      height: auto;
+
+      max-width:
+        calc(100vw - 120px);
+
+      max-height: 92vh;
+
+      object-fit: contain;
+
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .lightbox-close {
+      position: fixed;
+
+      top:
+        max(
+          15px,
+          env(safe-area-inset-top)
+        );
+
+      right:
+        max(
+          18px,
+          env(safe-area-inset-right)
+        );
+
+      z-index: 5010;
+
+      width: 44px;
+      height: 44px;
+
+      padding: 0;
+
+      border: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: transparent;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .lightbox-nav {
+      position: fixed;
+
+      top: 50%;
+
+      z-index: 5010;
+
+      width: 60px;
+      height: 88px;
+
+      padding: 0;
+
+      border: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: transparent;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 34px;
+
+      opacity: .82;
+
+      transform:
+        translateY(-50%);
+    }
+
+    .lightbox-prev {
+      left: 8px;
+    }
+
+    .lightbox-next {
+      right: 8px;
+    }
+
+    .lightbox-nav[hidden] {
+      display: none;
+    }
+
+    @media (max-width:900px) {
+
+      .project-head {
+        grid-template-columns:
+          minmax(220px,.65fr)
+          minmax(0,1fr);
+
+        gap: 45px;
+      }
+
+      .gallery {
+        gap:
+          55px
+          30px;
+      }
+
+      .credits-grid {
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+
+    }
+
+    @media (max-width:700px) {
+
+      .header {
+        height: 56px;
+        padding: 0 16px;
+      }
+
+      .project-head {
+        width:
+          calc(100% - 32px);
+
+        padding:
+          55px
+          0
+          70px;
+
+        display: block;
+      }
+
+      .project-title {
+        font-size:
+          clamp(54px,18vw,78px);
+      }
+
+      .hero {
+        width: 100%;
+
+        margin-top: 60px;
+        margin-left: 0;
+      }
+
+      .gallery {
+        width:
+          calc(100% - 32px);
+
+        padding:
+          55px
+          0
+          90px;
+
+        grid-template-columns: 1fr;
+
+        gap: 50px;
+      }
+
+      .photo,
+      .photo-button,
+      .photo-image {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+      }
+
+      .credits {
+        width:
+          calc(100% - 32px);
+
+        padding:
+          70px
+          0
+          80px;
+      }
+
+      .credits-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .project-footer {
+        width:
+          calc(100% - 32px);
+
+        padding-bottom: 40px;
+      }
+
+      .footer-link {
+        min-height: 100px;
+
+        grid-template-columns:
+          1fr
+          22px;
+
+        grid-template-rows:
+          auto
+          auto;
+
+        gap:
+          10px
+          15px;
+      }
+
+      .footer-label {
+        grid-column: 1 / -1;
+      }
+
+      .footer-title {
+        grid-column: 1;
+        font-size: 22px;
+      }
+
+      .footer-arrow {
+        grid-column: 2;
+        grid-row: 2;
+      }
+
+      .lightbox {
+        padding: 15px;
+      }
+
+      .lightbox-image {
+        max-width:
+          calc(100vw - 54px);
+
+        max-height: 88svh;
+      }
+
+      .lightbox-nav {
+        width: 48px;
+        height: 76px;
+        font-size: 27px;
+      }
+
+      .lightbox-prev {
+        left: 0;
+      }
+
+      .lightbox-next {
+        right: 0;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <header class="header">
+
+    <a
+      href="/campo"
+      class="brand"
+    >
+      STANSO
+    </a>
+
+    <a
+      href="/campo"
+      class="back"
+    >
+      ← CAMPO
+    </a>
+
+  </header>
+
+
+  <main>
+
+
+    <section class="project-head">
+
+      <div class="project-info">
+
+        <div class="project-type">
+          {project.type}
+        </div>
+
+        <h1 class="project-title">
+          {project.title}
+        </h1>
+
+        <div class="project-meta">
+
+          {project.year}
+
+          <br />
+
+          {
+            project.roles.join(
+              ' / '
+            )
+          }
+
+        </div>
+
+      </div>
+
+
+      {
+        hero && (
+
+          <div class="hero">
+
+            <button
+              class="
+                hero-button
+                lightbox-trigger
+              "
+              type="button"
+              data-lightbox-src={hero}
+              data-lightbox-alt={project.title}
+            >
+
+              <img
+                class="hero-image"
+                src={hero}
+                alt={project.title}
+              />
+
+            </button>
+
+          </div>
+
+        )
+      }
+
+    </section>
+
+
+    <section class="gallery">
+
+      {
+        images.map(
+          (
+            image,
+            index
+          ) => (
+
+            <article class="photo">
+
+              <button
+                class="
+                  photo-button
+                  lightbox-trigger
+                "
+                type="button"
+                data-lightbox-src={image}
+                data-lightbox-alt={
+                  `${project.title} — ${index + 1}`
+                }
+              >
+
+                <img
+                  class="photo-image"
+                  src={image}
+                  alt={
+                    `${project.title} — ${index + 1}`
+                  }
+                  loading="lazy"
+                />
+
+              </button>
+
+            </article>
+
+          )
+        )
+      }
+
+    </section>
+
+
+    <section class="credits">
+
+      <div class="credits-title">
+        CRÉDITOS
+      </div>
+
+      <div class="credits-grid">
+
+        {
+          project.credits.map(
+            (credit) => (
+
+              <div>
+
+                <div class="credit-label">
+                  {credit.label}
+                </div>
+
+                <div class="credit-value">
+                  {credit.value}
+                </div>
+
+              </div>
+
+            )
+          )
+        }
+
+      </div>
+
+    </section>
+
+
+    <footer class="project-footer">
+
+      <a
+        href="/campo"
+        class="footer-link"
+      >
+
+        <span class="footer-label">
+          VOLTAR
+        </span>
+
+        <span class="footer-title">
+          CAMPO
+        </span>
+
+        <span class="footer-arrow">
+          ←
+        </span>
+
+      </a>
+
+
+      {
+        nextProject && (
+
+          <a
+            href={
+              `/projetos/${nextProject.slug}`
+            }
+            class="footer-link"
+          >
+
+            <span class="footer-label">
+              PRÓXIMO PROJETO
+            </span>
+
+            <span class="footer-title">
+              {nextProject.title}
+            </span>
+
+            <span class="footer-arrow">
+              →
+            </span>
+
+          </a>
+
+        )
+      }
+
+    </footer>
+
+  </main>
+
+
+  <div
+    class="lightbox"
+    id="lightbox"
+    aria-hidden="true"
+  >
+
+    <button
+      class="lightbox-close"
+      id="lightbox-close"
+      type="button"
+      aria-label="Fechar imagem"
+    >
+      ×
+    </button>
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-prev
+      "
+      id="lightbox-prev"
+      type="button"
+      aria-label="Imagem anterior"
+    >
+      ←
+    </button>
+
+    <button
+      class="
+        lightbox-nav
+        lightbox-next
+      "
+      id="lightbox-next"
+      type="button"
+      aria-label="Próxima imagem"
+    >
+      →
+    </button>
+
+    <img
+      class="lightbox-image"
+      id="lightbox-image"
+      alt=""
+    />
+
+  </div>
+
+
+  <script is:inline>
+
+    var lightbox =
+      document.getElementById(
+        'lightbox'
+      );
+
+    var lightboxImage =
+      document.getElementById(
+        'lightbox-image'
+      );
+
+    var lightboxClose =
+      document.getElementById(
+        'lightbox-close'
+      );
+
+    var lightboxPrev =
+      document.getElementById(
+        'lightbox-prev'
+      );
+
+    var lightboxNext =
+      document.getElementById(
+        'lightbox-next'
+      );
+
+    var activeTriggers =
+      [];
+
+    var currentIndex =
+      -1;
+
+    var touchStartX =
+      null;
+
+    var touchStartY =
+      null;
+
+
+    function getTriggers() {
+
+      var seen =
+        new Set();
+
+      var result =
+        [];
+
+      document
+        .querySelectorAll(
+          '.lightbox-trigger'
+        )
+        .forEach(
+          function (
+            trigger
+          ) {
+
+            var src =
+              trigger.getAttribute(
+                'data-lightbox-src'
+              );
+
+            if (
+              !src ||
+              seen.has(src)
+            ) {
+              return;
+            }
+
+            seen.add(src);
+
+            result.push(
+              trigger
+            );
+
+          }
+        );
+
+      return result;
+
+    }
+
+
+    function updateArrows() {
+
+      var hidden =
+        activeTriggers.length <= 1;
+
+      if (lightboxPrev) {
+        lightboxPrev.hidden =
+          hidden;
+      }
+
+      if (lightboxNext) {
+        lightboxNext.hidden =
+          hidden;
+      }
+
+    }
+
+
+    function showImage(
+      index
+    ) {
+
+      if (
+        !lightboxImage ||
+        activeTriggers.length === 0
+      ) {
+        return;
+      }
+
+      var total =
+        activeTriggers.length;
+
+      currentIndex =
+        (
+          index +
+          total
+        )
+        %
+        total;
+
+      var trigger =
+        activeTriggers[
+          currentIndex
+        ];
+
+      var src =
+        trigger.getAttribute(
+          'data-lightbox-src'
+        );
+
+      var alt =
+        trigger.getAttribute(
+          'data-lightbox-alt'
+        ) || '';
+
+      lightboxImage.setAttribute(
+        'src',
+        src
+      );
+
+      lightboxImage.setAttribute(
+        'alt',
+        alt
+      );
+
+      updateArrows();
+
+    }
+
+
+    function openLightbox(
+      trigger
+    ) {
+
+      if (!lightbox) {
+        return;
+      }
+
+      activeTriggers =
+        getTriggers();
+
+      var src =
+        trigger.getAttribute(
+          'data-lightbox-src'
+        );
+
+      currentIndex =
+        activeTriggers.findIndex(
+          function (
+            item
+          ) {
+
+            return (
+              item.getAttribute(
+                'data-lightbox-src'
+              )
+              ===
+              src
+            );
+
+          }
+        );
+
+      if (
+        currentIndex < 0
+      ) {
+        return;
+      }
+
+      showImage(
+        currentIndex
+      );
+
+      lightbox.classList.add(
+        'is-open'
+      );
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+
+      document.body.classList.add(
+        'lightbox-open'
+      );
+
+    }
+
+
+    function closeLightbox() {
+
+      if (
+        !lightbox ||
+        !lightboxImage
+      ) {
+        return;
+      }
+
+      lightbox.classList.remove(
+        'is-open'
+      );
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+      lightboxImage.removeAttribute(
+        'src'
+      );
+
+      document.body.classList.remove(
+        'lightbox-open'
+      );
+
+      activeTriggers =
+        [];
+
+      currentIndex =
+        -1;
+
+    }
+
+
+    function previousImage() {
+
+      if (
+        activeTriggers.length > 1
+      ) {
+        showImage(
+          currentIndex - 1
+        );
+      }
+
+    }
+
+
+    function nextImage() {
+
+      if (
+        activeTriggers.length > 1
+      ) {
+        showImage(
+          currentIndex + 1
+        );
+      }
+
+    }
+
+
+    document.addEventListener(
+      'click',
+      function (
+        event
+      ) {
+
+        var target =
+          event.target;
+
+        if (
+          !(target instanceof Element)
+        ) {
+          return;
+        }
+
+        var trigger =
+          target.closest(
+            '.lightbox-trigger'
+          );
+
+        if (trigger) {
+
+          event.preventDefault();
+
+          openLightbox(
+            trigger
+          );
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-prev'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          previousImage();
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-next'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          nextImage();
+
+          return;
+        }
+
+        if (
+          target.closest(
+            '#lightbox-close'
+          )
+        ) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          closeLightbox();
+
+          return;
+        }
+
+        if (
+          target === lightbox
+        ) {
+          closeLightbox();
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      'keydown',
+      function (
+        event
+      ) {
+
+        if (
+          !lightbox ||
+          !lightbox.classList.contains(
+            'is-open'
+          )
+        ) {
+          return;
+        }
+
+        if (
+          event.key ===
+          'Escape'
+        ) {
+          closeLightbox();
+        }
+
+        if (
+          event.key ===
+          'ArrowLeft'
+        ) {
+          previousImage();
+        }
+
+        if (
+          event.key ===
+          'ArrowRight'
+        ) {
+          nextImage();
+        }
+
+      }
+    );
+
+
+    if (lightbox) {
+
+      lightbox.addEventListener(
+        'touchstart',
+        function (
+          event
+        ) {
+
+          if (
+            event.touches.length !== 1
+          ) {
+            return;
+          }
+
+          touchStartX =
+            event.touches[0]
+              .clientX;
+
+          touchStartY =
+            event.touches[0]
+              .clientY;
+
+        },
+        {
+          passive: true
+        }
+      );
+
+
+      lightbox.addEventListener(
+        'touchend',
+        function (
+          event
+        ) {
+
+          if (
+            touchStartX === null ||
+            touchStartY === null ||
+            event.changedTouches.length === 0
+          ) {
+            return;
+          }
+
+          var deltaX =
+            event.changedTouches[0]
+              .clientX -
+            touchStartX;
+
+          var deltaY =
+            event.changedTouches[0]
+              .clientY -
+            touchStartY;
+
+          touchStartX =
+            null;
+
+          touchStartY =
+            null;
+
+          if (
+            Math.abs(deltaX) < 45 ||
+            Math.abs(deltaX) <=
+            Math.abs(deltaY)
+          ) {
+            return;
+          }
+
+          if (
+            deltaX < 0
+          ) {
+            nextImage();
+          }
+          else {
+            previousImage();
+          }
+
+        },
+        {
+          passive: true
+        }
+      );
+
+    }
+
+  </script>
+
+
+</body>
+
+</html>
