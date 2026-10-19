@@ -218,24 +218,24 @@ export const projects: Project[] = [
       'NOMOFOBIA parte da hiperconectividade e da dependência das telas para construir uma situação de diagnóstico. A linguagem hospitalar transforma o corpo em paciente, produto e interface, enquanto dispositivos, monitoramento e encenação aproximam cuidado, controle e consumo de imagem.',
 
     hero:
-      '/images/nomofobia/nomofobia-1.jpg',
+      '/gallery/images/nomofobia/nomofobia-1.jpg',
 
     fieldImage:
-      '/images/nomofobia/nomofobia-3.jpg',
+      '/gallery/images/nomofobia/nomofobia-3.jpg',
 
     gallery: [
-      '/images/nomofobia/nomofobia-2.jpg',
-      '/images/nomofobia/nomofobia-3.jpg',
-      '/images/nomofobia/nomofobia-4.jpg',
-      '/images/nomofobia/nomofobia-5.jpg',
-      '/images/nomofobia/nomofobia-6.jpg',
-      '/images/nomofobia/nomofobia-7.jpg',
-      '/images/nomofobia/nomofobia-8.jpg',
-      '/images/nomofobia/nomofobia-9.jpg',
-      '/images/nomofobia/nomofobia-10.webp',
-      '/images/nomofobia/nomofobia-11.jpg',
-      '/images/nomofobia/nomofobia-12.jpg',
-      '/images/nomofobia/nomofobia-13.jpg'
+      '/gallery/images/nomofobia/nomofobia-2.jpg',
+      '/gallery/images/nomofobia/nomofobia-3.jpg',
+      '/gallery/images/nomofobia/nomofobia-4.jpg',
+      '/gallery/images/nomofobia/nomofobia-5.jpg',
+      '/gallery/images/nomofobia/nomofobia-6.jpg',
+      '/gallery/images/nomofobia/nomofobia-7.jpg',
+      '/gallery/images/nomofobia/nomofobia-8.jpg',
+      '/gallery/images/nomofobia/nomofobia-9.jpg',
+      '/gallery/images/nomofobia/nomofobia-10.webp',
+      '/gallery/images/nomofobia/nomofobia-11.jpg',
+      '/gallery/images/nomofobia/nomofobia-12.jpg',
+      '/gallery/images/nomofobia/nomofobia-13.jpg'
     ],
 
     galleryLayout: [
@@ -377,19 +377,19 @@ export const projects: Project[] = [
       'PLT parte da modelagem como linguagem visual. O editorial aproxima roupa, molde e experimento para construir silhuetas entre o vestível e o protótipo. Papel kraft, fita, impressão e volume aparecem como matéria de imagem e como estrutura de moda.',
 
     hero:
-      '/images/plt/IMG_0131.jpg',
+      '/gallery/images/plt/IMG_0131.jpg',
 
     fieldImage:
-      '/images/plt/IMG_0131.jpg',
+      '/gallery/images/plt/IMG_0131.jpg',
 
     gallery: [
-      '/images/plt/IMG_0119.jpg',
-      '/images/plt/IMG_0006_1.jpg',
-      '/images/plt/IMG_0099.jpg',
-      '/images/plt/IMG_0090.jpg',
-      '/images/plt/IMG_0024.jpg',
-      '/images/plt/IMG_0060.jpg',
-      '/images/plt/IMG_0031-2.jpg'
+      '/gallery/images/plt/IMG_0119.jpg',
+      '/gallery/images/plt/IMG_0006_1.jpg',
+      '/gallery/images/plt/IMG_0099.jpg',
+      '/gallery/images/plt/IMG_0090.jpg',
+      '/gallery/images/plt/IMG_0024.jpg',
+      '/gallery/images/plt/IMG_0060.jpg',
+      '/gallery/images/plt/IMG_0031-2.jpg'
     ],
 
     galleryLayout: [
@@ -505,20 +505,20 @@ export const projects: Project[] = [
       'Partindo da estética do still fotográfico, FEED observa a transformação do produto em conteúdo visual destinado à circulação, ao engajamento e à produção de desejo.',
 
     hero:
-      '/images/feed/_M2A9658-Editar-Editar.jpg',
+      '/gallery/images/feed/_M2A9658-Editar-Editar.jpg',
 
     fieldImage:
-      '/images/feed/_M2A9689.jpg',
+      '/gallery/images/feed/_M2A9689.jpg',
 
     gallery: [
-      '/images/feed/_M2A9708.jpg',
-      '/images/feed/_M2A9685.jpg',
-      '/images/feed/_M2A9677-Editar.jpg',
-      '/images/feed/_M2A9689.jpg',
-      '/images/feed/_M2A9623.jpg',
-      '/images/feed/_M2A9647.jpg',
-      '/images/feed/_M2A9696.jpg',
-      '/images/feed/_M2A9680.jpg'
+      '/gallery/images/feed/_M2A9708.jpg',
+      '/gallery/images/feed/_M2A9685.jpg',
+      '/gallery/images/feed/_M2A9677-Editar.jpg',
+      '/gallery/images/feed/_M2A9689.jpg',
+      '/gallery/images/feed/_M2A9623.jpg',
+      '/gallery/images/feed/_M2A9647.jpg',
+      '/gallery/images/feed/_M2A9696.jpg',
+      '/gallery/images/feed/_M2A9680.jpg'
     ],
 
     nextProject: 'irl',
@@ -843,10 +843,10 @@ export const projects: Project[] = [
       'Fotografias para Memórias de Marte, do artista Stef.',
 
     hero:
-      '/images/steff/foto-20.jpg',
+      '/gallery/images/steff/foto-20.jpg',
 
     fieldImage:
-      '/images/steff/foto-20.jpg',
+      '/gallery/images/steff/foto-20.jpg',
 
     /*
     foto-20 é hero.
@@ -854,31 +854,31 @@ export const projects: Project[] = [
     */
 
     gallery: [
-      '/images/steff/foto-1.jpg',
-      '/images/steff/foto-2.jpg',
-      '/images/steff/foto-3.jpg',
+      '/gallery/images/steff/foto-1.jpg',
+      '/gallery/images/steff/foto-2.jpg',
+      '/gallery/images/steff/foto-3.jpg',
 
-      '/images/steff/foto-5.jpg',
-      '/images/steff/foto-6.jpg',
-      '/images/steff/foto-7.jpg',
-      '/images/steff/foto-8.jpg',
-      '/images/steff/foto-9.jpg',
+      '/gallery/images/steff/foto-5.jpg',
+      '/gallery/images/steff/foto-6.jpg',
+      '/gallery/images/steff/foto-7.jpg',
+      '/gallery/images/steff/foto-8.jpg',
+      '/gallery/images/steff/foto-9.jpg',
 
-      '/images/steff/foto-10.jpg',
-      '/images/steff/foto-11.jpg',
-      '/images/steff/foto-12.jpg',
-      '/images/steff/foto-13.jpg',
-      '/images/steff/foto-14.jpg',
-      '/images/steff/foto-15.jpg',
-      '/images/steff/foto-16.jpg',
-      '/images/steff/foto-17.jpg',
-      '/images/steff/foto-18.jpg',
-      '/images/steff/foto-19.jpg',
+      '/gallery/images/steff/foto-10.jpg',
+      '/gallery/images/steff/foto-11.jpg',
+      '/gallery/images/steff/foto-12.jpg',
+      '/gallery/images/steff/foto-13.jpg',
+      '/gallery/images/steff/foto-14.jpg',
+      '/gallery/images/steff/foto-15.jpg',
+      '/gallery/images/steff/foto-16.jpg',
+      '/gallery/images/steff/foto-17.jpg',
+      '/gallery/images/steff/foto-18.jpg',
+      '/gallery/images/steff/foto-19.jpg',
 
-      '/images/steff/foto-21.jpg',
-      '/images/steff/foto-22.jpg',
-      '/images/steff/foto-23.jpg',
-      '/images/steff/foto-24.jpg'
+      '/gallery/images/steff/foto-21.jpg',
+      '/gallery/images/steff/foto-22.jpg',
+      '/gallery/images/steff/foto-23.jpg',
+      '/gallery/images/steff/foto-24.jpg'
     ],
 
     credits: [
@@ -970,10 +970,10 @@ export const projects: Project[] = [
       'Fotografias para Nunca Mais do Mesmo, projeto de Ths com Stef.',
 
     hero:
-      '/images/ths & stef/foto-11.jpg',
+      '/gallery/images/ths & stef/foto-11.jpg',
 
     fieldImage:
-      '/images/ths & stef/foto-11.jpg',
+      '/gallery/images/ths & stef/foto-11.jpg',
 
     /*
     foto-11 é hero.
@@ -981,24 +981,24 @@ export const projects: Project[] = [
     */
 
     gallery: [
-      '/images/ths & stef/foto-1.jpg',
-      '/images/ths & stef/foto-2.jpg',
-      '/images/ths & stef/foto-3.jpg',
-      '/images/ths & stef/foto-4.jpg',
-      '/images/ths & stef/foto-5.jpg',
-      '/images/ths & stef/foto-6.jpg',
-      '/images/ths & stef/foto-7.jpg',
-      '/images/ths & stef/foto-8.jpg',
-      '/images/ths & stef/foto-9.jpg',
-      '/images/ths & stef/foto-10.jpg',
+      '/gallery/images/ths & stef/foto-1.jpg',
+      '/gallery/images/ths & stef/foto-2.jpg',
+      '/gallery/images/ths & stef/foto-3.jpg',
+      '/gallery/images/ths & stef/foto-4.jpg',
+      '/gallery/images/ths & stef/foto-5.jpg',
+      '/gallery/images/ths & stef/foto-6.jpg',
+      '/gallery/images/ths & stef/foto-7.jpg',
+      '/gallery/images/ths & stef/foto-8.jpg',
+      '/gallery/images/ths & stef/foto-9.jpg',
+      '/gallery/images/ths & stef/foto-10.jpg',
 
-      '/images/ths & stef/foto-12.jpg',
-      '/images/ths & stef/foto-13.jpg',
+      '/gallery/images/ths & stef/foto-12.jpg',
+      '/gallery/images/ths & stef/foto-13.jpg',
 
-      '/images/ths & stef/foto-15.jpg',
-      '/images/ths & stef/foto-16.jpg',
-      '/images/ths & stef/foto-17.jpg',
-      '/images/ths & stef/foto-18.jpg'
+      '/gallery/images/ths & stef/foto-15.jpg',
+      '/gallery/images/ths & stef/foto-16.jpg',
+      '/gallery/images/ths & stef/foto-17.jpg',
+      '/gallery/images/ths & stef/foto-18.jpg'
     ],
 
     credits: [
@@ -1087,13 +1087,13 @@ export const projects: Project[] = [
       'Styling e desenvolvimento visual para I’M SO PROUD OF U, de Kweller.',
 
     hero:
-      '/images/external/kweller-spotify.webp',
+      '/gallery/images/external/kweller-spotify.webp',
 
     fieldImage:
-      '/images/kweller/foto kira.jpeg',
+      '/gallery/images/kweller/foto kira.jpeg',
 
     gallery: [
-      '/images/external/kweller-spotify.webp'
+      '/gallery/images/external/kweller-spotify.webp'
     ],
 
     credits: [
@@ -1316,10 +1316,10 @@ export const projects: Project[] = [
       'Retrato e imagem de artista.',
 
     hero:
-      '/images/smoke/foto10.jpg',
+      '/gallery/images/smoke/foto10.jpg',
 
     fieldImage:
-      '/images/smoke/foto7.jpg',
+      '/gallery/images/smoke/foto7.jpg',
 
     /*
     foto10 é hero.
@@ -1327,21 +1327,21 @@ export const projects: Project[] = [
     */
 
     gallery: [
-      '/images/smoke/foto2.jpg',
-      '/images/smoke/foto8.jpg',
-      '/images/smoke/foto12.jpg',
-      '/images/smoke/foto11.jpg',
-      '/images/smoke/foto5.jpg',
-      '/images/smoke/foto15.jpg',
-      '/images/smoke/foto13.jpg',
-      '/images/smoke/foto16.jpg',
-      '/images/smoke/foto17.jpg',
-      '/images/smoke/foto21.jpg',
-      '/images/smoke/foto20.jpg',
-      '/images/smoke/foto23.jpg',
-      '/images/smoke/foto24.jpg',
-      '/images/smoke/foto25.jpg',
-      '/images/smoke/foto7.jpg'
+      '/gallery/images/smoke/foto2.jpg',
+      '/gallery/images/smoke/foto8.jpg',
+      '/gallery/images/smoke/foto12.jpg',
+      '/gallery/images/smoke/foto11.jpg',
+      '/gallery/images/smoke/foto5.jpg',
+      '/gallery/images/smoke/foto15.jpg',
+      '/gallery/images/smoke/foto13.jpg',
+      '/gallery/images/smoke/foto16.jpg',
+      '/gallery/images/smoke/foto17.jpg',
+      '/gallery/images/smoke/foto21.jpg',
+      '/gallery/images/smoke/foto20.jpg',
+      '/gallery/images/smoke/foto23.jpg',
+      '/gallery/images/smoke/foto24.jpg',
+      '/gallery/images/smoke/foto25.jpg',
+      '/gallery/images/smoke/foto7.jpg'
     ],
 
     credits: [
@@ -1419,10 +1419,10 @@ export const projects: Project[] = [
       'Cobertura de backstage do desfile da Radio Club, realizado no Fórum da Faculdade Santa Marcelina em 2022.',
 
     hero:
-      '/images/radio_club/radio16.jpg',
+      '/gallery/images/radio_club/radio16.jpg',
 
     fieldImage:
-      '/images/radio_club/radio16.jpg',
+      '/gallery/images/radio_club/radio16.jpg',
 
     /*
     radio16 é hero.
@@ -1430,17 +1430,17 @@ export const projects: Project[] = [
     */
 
     gallery: [
-      '/images/radio_club/radio19.jpg',
-      '/images/radio_club/radio20.jpg',
-      '/images/radio_club/radio22.jpg',
-      '/images/radio_club/radio24.jpg',
-      '/images/radio_club/radio15.jpg',
-      '/images/radio_club/radio3_r.jpg',
-      '/images/radio_club/radio4.jpg',
-      '/images/radio_club/radio5.jpg',
-      '/images/radio_club/radio8.jpg',
-      '/images/radio_club/radio13.jpg',
-      '/images/radio_club/radio11.jpg'
+      '/gallery/images/radio_club/radio19.jpg',
+      '/gallery/images/radio_club/radio20.jpg',
+      '/gallery/images/radio_club/radio22.jpg',
+      '/gallery/images/radio_club/radio24.jpg',
+      '/gallery/images/radio_club/radio15.jpg',
+      '/gallery/images/radio_club/radio3_r.jpg',
+      '/gallery/images/radio_club/radio4.jpg',
+      '/gallery/images/radio_club/radio5.jpg',
+      '/gallery/images/radio_club/radio8.jpg',
+      '/gallery/images/radio_club/radio13.jpg',
+      '/gallery/images/radio_club/radio11.jpg'
     ],
 
     nextProject:
@@ -1531,63 +1531,63 @@ export const projects: Project[] = [
     randomHero: true,
 
     gallery: [
-      '/images/galeria-pb/foto-1.jpg',
-      '/images/galeria-pb/foto-2.jpg',
-      '/images/galeria-pb/foto-3.jpg',
-      '/images/galeria-pb/foto-4.jpg',
-      '/images/galeria-pb/foto-5.jpg',
-      '/images/galeria-pb/foto-6.jpg',
-      '/images/galeria-pb/foto-7.jpg',
-      '/images/galeria-pb/foto-8.jpg',
-      '/images/galeria-pb/foto-9.jpg',
-      '/images/galeria-pb/foto-10.jpg',
+      '/gallery/images/galeria-pb/foto-1.jpg',
+      '/gallery/images/galeria-pb/foto-2.jpg',
+      '/gallery/images/galeria-pb/foto-3.jpg',
+      '/gallery/images/galeria-pb/foto-4.jpg',
+      '/gallery/images/galeria-pb/foto-5.jpg',
+      '/gallery/images/galeria-pb/foto-6.jpg',
+      '/gallery/images/galeria-pb/foto-7.jpg',
+      '/gallery/images/galeria-pb/foto-8.jpg',
+      '/gallery/images/galeria-pb/foto-9.jpg',
+      '/gallery/images/galeria-pb/foto-10.jpg',
 
-      '/images/galeria-pb/foto-11.jpg',
-      '/images/galeria-pb/foto-12.jpg',
-      '/images/galeria-pb/foto-13.jpg',
-      '/images/galeria-pb/foto-14.jpg',
-      '/images/galeria-pb/foto-15.jpg',
-      '/images/galeria-pb/foto-16.jpg',
-      '/images/galeria-pb/foto-17.jpg',
-      '/images/galeria-pb/foto-18.jpg',
-      '/images/galeria-pb/foto-19.jpg',
-      '/images/galeria-pb/foto-20.jpg',
+      '/gallery/images/galeria-pb/foto-11.jpg',
+      '/gallery/images/galeria-pb/foto-12.jpg',
+      '/gallery/images/galeria-pb/foto-13.jpg',
+      '/gallery/images/galeria-pb/foto-14.jpg',
+      '/gallery/images/galeria-pb/foto-15.jpg',
+      '/gallery/images/galeria-pb/foto-16.jpg',
+      '/gallery/images/galeria-pb/foto-17.jpg',
+      '/gallery/images/galeria-pb/foto-18.jpg',
+      '/gallery/images/galeria-pb/foto-19.jpg',
+      '/gallery/images/galeria-pb/foto-20.jpg',
 
-      '/images/galeria-pb/foto-21.jpg',
-      '/images/galeria-pb/foto-22.jpg',
-      '/images/galeria-pb/foto-23.jpg',
-      '/images/galeria-pb/foto-24.jpg',
-      '/images/galeria-pb/foto-25.jpg',
-      '/images/galeria-pb/foto-26.jpg',
-      '/images/galeria-pb/foto-27.jpg',
-      '/images/galeria-pb/foto-28.jpg',
-      '/images/galeria-pb/foto-29.jpg',
-      '/images/galeria-pb/foto-30.jpg',
+      '/gallery/images/galeria-pb/foto-21.jpg',
+      '/gallery/images/galeria-pb/foto-22.jpg',
+      '/gallery/images/galeria-pb/foto-23.jpg',
+      '/gallery/images/galeria-pb/foto-24.jpg',
+      '/gallery/images/galeria-pb/foto-25.jpg',
+      '/gallery/images/galeria-pb/foto-26.jpg',
+      '/gallery/images/galeria-pb/foto-27.jpg',
+      '/gallery/images/galeria-pb/foto-28.jpg',
+      '/gallery/images/galeria-pb/foto-29.jpg',
+      '/gallery/images/galeria-pb/foto-30.jpg',
 
-      '/images/galeria-pb/foto-31.jpg',
-      '/images/galeria-pb/foto-32.jpg',
-      '/images/galeria-pb/foto-33.jpg',
-      '/images/galeria-pb/foto-34.jpg',
-      '/images/galeria-pb/foto-35.jpg',
-      '/images/galeria-pb/foto-36.jpg',
-      '/images/galeria-pb/foto-37.jpg',
-      '/images/galeria-pb/foto-38.jpg',
-      '/images/galeria-pb/foto-39.jpg',
-      '/images/galeria-pb/foto-40.jpg',
+      '/gallery/images/galeria-pb/foto-31.jpg',
+      '/gallery/images/galeria-pb/foto-32.jpg',
+      '/gallery/images/galeria-pb/foto-33.jpg',
+      '/gallery/images/galeria-pb/foto-34.jpg',
+      '/gallery/images/galeria-pb/foto-35.jpg',
+      '/gallery/images/galeria-pb/foto-36.jpg',
+      '/gallery/images/galeria-pb/foto-37.jpg',
+      '/gallery/images/galeria-pb/foto-38.jpg',
+      '/gallery/images/galeria-pb/foto-39.jpg',
+      '/gallery/images/galeria-pb/foto-40.jpg',
 
-      '/images/galeria-pb/foto-41.jpg',
-      '/images/galeria-pb/foto-42.jpg',
-      '/images/galeria-pb/foto-43.jpg',
-      '/images/galeria-pb/foto-44.jpg',
-      '/images/galeria-pb/foto-45.jpg',
-      '/images/galeria-pb/foto-46.jpg',
-      '/images/galeria-pb/foto-47.jpg',
-      '/images/galeria-pb/foto-48.jpg',
-      '/images/galeria-pb/foto-49.jpg',
-      '/images/galeria-pb/foto-50.jpg',
+      '/gallery/images/galeria-pb/foto-41.jpg',
+      '/gallery/images/galeria-pb/foto-42.jpg',
+      '/gallery/images/galeria-pb/foto-43.jpg',
+      '/gallery/images/galeria-pb/foto-44.jpg',
+      '/gallery/images/galeria-pb/foto-45.jpg',
+      '/gallery/images/galeria-pb/foto-46.jpg',
+      '/gallery/images/galeria-pb/foto-47.jpg',
+      '/gallery/images/galeria-pb/foto-48.jpg',
+      '/gallery/images/galeria-pb/foto-49.jpg',
+      '/gallery/images/galeria-pb/foto-50.jpg',
 
-      '/images/galeria-pb/foto-51.jpg',
-      '/images/galeria-pb/foto-52.jpg'
+      '/gallery/images/galeria-pb/foto-51.jpg',
+      '/gallery/images/galeria-pb/foto-52.jpg'
     ],
 
     credits: [
@@ -1651,17 +1651,17 @@ export const projects: Project[] = [
       'Editorial desenvolvido a partir da música MC Brinquedo vs Björk & Omar Souleyman — Pau na Crystalline.',
 
     hero:
-      '/images/cristal/foto1.jpg',
+      '/gallery/images/cristal/foto1.jpg',
 
     fieldImage:
-      '/images/cristal/foto2-2.jpg',
+      '/gallery/images/cristal/foto2-2.jpg',
 
     gallery: [
-      '/images/cristal/foto2-2.jpg',
-      '/images/cristal/foto3.jpg',
-      '/images/cristal/foto5.jpg',
-      '/images/cristal/foto4.jpg',
-      '/images/cristal/foto8.jpg'
+      '/gallery/images/cristal/foto2-2.jpg',
+      '/gallery/images/cristal/foto3.jpg',
+      '/gallery/images/cristal/foto5.jpg',
+      '/gallery/images/cristal/foto4.jpg',
+      '/gallery/images/cristal/foto8.jpg'
     ],
 
     credits: [
@@ -1741,16 +1741,16 @@ export const projects: Project[] = [
       'Exploração visual em moda construída a partir da ideia de sabores. Produzido para a revista acadêmica Dish.',
 
     hero:
-      '/images/palato/palato0.jpg',
+      '/gallery/images/palato/palato0.jpg',
 
     fieldImage:
-      '/images/palato/palato9.jpg',
+      '/gallery/images/palato/palato9.jpg',
 
     gallery: [
-      '/images/palato/palato1.jpg',
-      '/images/palato/palato4.jpg',
-      '/images/palato/palato5.jpg',
-      '/images/palato/palato9.jpg'
+      '/gallery/images/palato/palato1.jpg',
+      '/gallery/images/palato/palato4.jpg',
+      '/gallery/images/palato/palato5.jpg',
+      '/gallery/images/palato/palato9.jpg'
     ],
 
     credits: [

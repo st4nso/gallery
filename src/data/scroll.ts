@@ -233,7 +233,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/estudo-pre-banca.png',
+          '/gallery/images/scroll/processo/estudo-pre-banca.png',
 
         alt:
           'Estudo inicial de Scroll'
@@ -244,7 +244,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/moodboard-nomofobia.png',
+          '/gallery/images/scroll/processo/moodboard-nomofobia.png',
 
         alt:
           'Moodboard de Nomofobia'
@@ -255,7 +255,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/processo-set.png',
+          '/gallery/images/scroll/processo/processo-set.png',
 
         alt:
           'Registros de processo e bastidores'
@@ -266,7 +266,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/moodboard-plt.png',
+          '/gallery/images/scroll/processo/moodboard-plt.png',
 
         alt:
           'Moodboard de PLT'
@@ -277,7 +277,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/diagramacao-inicial.png',
+          '/gallery/images/scroll/processo/diagramacao-inicial.png',
 
         alt:
           'Teste inicial de diagramação da monografia'
@@ -288,7 +288,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/objetos/acessorios-bolsa-board.png',
+          '/gallery/images/scroll/objetos/acessorios-bolsa-board.png',
 
         alt:
           'Desenvolvimento de acessórios e bolsa'
@@ -299,7 +299,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/objetos/bolsas-finais.png',
+          '/gallery/images/scroll/objetos/bolsas-finais.png',
 
         alt:
           'Bolsas desenvolvidas durante Scroll'
@@ -310,7 +310,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/lookbook-1.png',
+          '/gallery/images/scroll/processo/lookbook-1.png',
 
         alt:
           'Estudo de looks e variações de modelagem'
@@ -321,7 +321,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/lookbook-2.png',
+          '/gallery/images/scroll/processo/lookbook-2.png',
 
         alt:
           'Estudo de looks, proporções e acessórios'
@@ -332,7 +332,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/moodboard-nomofobia-cena3.png',
+          '/gallery/images/scroll/processo/moodboard-nomofobia-cena3.png',
 
         alt:
           'Referências visuais e ilustração para Nomofobia'
@@ -343,7 +343,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'image',
 
         src:
-          '/images/scroll/processo/diagramacao-scroll-referencias.png',
+          '/gallery/images/scroll/processo/diagramacao-scroll-referencias.png',
 
         alt:
           'Referências de diagramação e interface para Scroll'
@@ -354,7 +354,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'video',
 
         src:
-          '/videos/scroll/caderno-processo.mp4',
+          '/gallery/videos/scroll/caderno-processo.mp4',
 
         label:
           'CADERNO DE PROCESSO',
@@ -377,7 +377,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'video',
 
         src:
-          '/videos/scroll/cartao-scroll-impressa.mp4',
+          '/gallery/videos/scroll/cartao-scroll-impressa.mp4',
 
         label:
           'CARTÕES DE VISITA ',
@@ -435,7 +435,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
 
         {
           src:
-            '/images/scroll/mockups/revista-fechada.jpeg',
+            '/gallery/images/scroll/mockups/revista-fechada.jpeg',
 
           alt:
             'Revista Scroll fechada vista de cima',
@@ -463,7 +463,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/processo/tipografia-scroll.png',
+          '/gallery/images/scroll/processo/tipografia-scroll.png',
 
         alt:
           'Estudo de formato e tipografia da revista Scroll'
@@ -474,7 +474,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/capa-scroll.jpg',
+          '/gallery/images/scroll/publicacao/capa-scroll.jpg',
 
         alt:
           'Capa da revista Scroll'
@@ -485,7 +485,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/carta-editor.jpg',
+          '/gallery/images/scroll/publicacao/carta-editor.jpg',
 
         alt:
           'Carta do editor da revista Scroll'
@@ -496,7 +496,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/nomofobia-abertura.jpg',
+          '/gallery/images/scroll/publicacao/nomofobia-abertura.jpg',
 
         alt:
           'Abertura do editorial Nomofobia na revista Scroll'
@@ -507,7 +507,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/nomofobia-dual.jpg',
+          '/gallery/images/scroll/publicacao/nomofobia-dual.jpg',
 
         alt:
           'Páginas do editorial Nomofobia'
@@ -518,7 +518,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/story-nomofobia.jpg',
+          '/gallery/images/scroll/publicacao/story-nomofobia.jpg',
 
         alt:
           'Página de Nomofobia inspirada em linguagem de story'
@@ -529,7 +529,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/plt.jpg',
+          '/gallery/images/scroll/publicacao/plt.jpg',
 
         alt:
           'Páginas do editorial PLT na revista Scroll'
@@ -540,7 +540,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'video',
 
         src:
-          '/videos/scroll/folheando-plt.mp4',
+          '/gallery/videos/scroll/folheando-plt.mp4',
 
         label:
           'SCROLL / PLT / FOLHEAMENTO',
@@ -563,7 +563,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/feed-patrocinado.jpg',
+          '/gallery/images/scroll/publicacao/feed-patrocinado.jpg',
 
         alt:
           'Página do editorial Feed construída como conteúdo patrocinado'
@@ -574,7 +574,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '/images/scroll/publicacao/irl-abertura.jpg',
+          '/gallery/images/scroll/publicacao/irl-abertura.jpg',
 
         alt:
           'Abertura do editorial IRL na revista Scroll'
