@@ -1530,63 +1530,63 @@ export const projects: Project[] = [
     randomHero: true,
 
     gallery: [
-      '//images/galeria-pb/foto-1.jpg',
-      '//images/galeria-pb/foto-2.jpg',
-      '//images/galeria-pb/foto-3.jpg',
-      '//images/galeria-pb/foto-4.jpg',
-      '//images/galeria-pb/foto-5.jpg',
-      '//images/galeria-pb/foto-6.jpg',
-      '//images/galeria-pb/foto-7.jpg',
-      '//images/galeria-pb/foto-8.jpg',
-      '//images/galeria-pb/foto-9.jpg',
-      '//images/galeria-pb/foto-10.jpg',
+      '/images/galeria-pb/foto-1.jpg',
+      '/images/galeria-pb/foto-2.jpg',
+      '/images/galeria-pb/foto-3.jpg',
+      '/images/galeria-pb/foto-4.jpg',
+      '/images/galeria-pb/foto-5.jpg',
+      '/images/galeria-pb/foto-6.jpg',
+      '/images/galeria-pb/foto-7.jpg',
+      '/images/galeria-pb/foto-8.jpg',
+      '/images/galeria-pb/foto-9.jpg',
+      '/images/galeria-pb/foto-10.jpg',
 
-      '//images/galeria-pb/foto-11.jpg',
-      '//images/galeria-pb/foto-12.jpg',
-      '//images/galeria-pb/foto-13.jpg',
-      '//images/galeria-pb/foto-14.jpg',
-      '//images/galeria-pb/foto-15.jpg',
-      '//images/galeria-pb/foto-16.jpg',
-      '//images/galeria-pb/foto-17.jpg',
-      '//images/galeria-pb/foto-18.jpg',
-      '//images/galeria-pb/foto-19.jpg',
-      '//images/galeria-pb/foto-20.jpg',
+      '/images/galeria-pb/foto-11.jpg',
+      '/images/galeria-pb/foto-12.jpg',
+      '/images/galeria-pb/foto-13.jpg',
+      '/images/galeria-pb/foto-14.jpg',
+      '/images/galeria-pb/foto-15.jpg',
+      '/images/galeria-pb/foto-16.jpg',
+      '/images/galeria-pb/foto-17.jpg',
+      '/images/galeria-pb/foto-18.jpg',
+      '/images/galeria-pb/foto-19.jpg',
+      '/images/galeria-pb/foto-20.jpg',
 
-      '//images/galeria-pb/foto-21.jpg',
-      '//images/galeria-pb/foto-22.jpg',
-      '//images/galeria-pb/foto-23.jpg',
-      '//images/galeria-pb/foto-24.jpg',
-      '//images/galeria-pb/foto-25.jpg',
-      '//images/galeria-pb/foto-26.jpg',
-      '//images/galeria-pb/foto-27.jpg',
-      '//images/galeria-pb/foto-28.jpg',
-      '//images/galeria-pb/foto-29.jpg',
-      '//images/galeria-pb/foto-30.jpg',
+      '/images/galeria-pb/foto-21.jpg',
+      '/images/galeria-pb/foto-22.jpg',
+      '/images/galeria-pb/foto-23.jpg',
+      '/images/galeria-pb/foto-24.jpg',
+      '/images/galeria-pb/foto-25.jpg',
+      '/images/galeria-pb/foto-26.jpg',
+      '/images/galeria-pb/foto-27.jpg',
+      '/images/galeria-pb/foto-28.jpg',
+      '/images/galeria-pb/foto-29.jpg',
+      '/images/galeria-pb/foto-30.jpg',
 
-      '//images/galeria-pb/foto-31.jpg',
-      '//images/galeria-pb/foto-32.jpg',
-      '//images/galeria-pb/foto-33.jpg',
-      '//images/galeria-pb/foto-34.jpg',
-      '//images/galeria-pb/foto-35.jpg',
-      '//images/galeria-pb/foto-36.jpg',
-      '//images/galeria-pb/foto-37.jpg',
-      '//images/galeria-pb/foto-38.jpg',
-      '//images/galeria-pb/foto-39.jpg',
-      '//images/galeria-pb/foto-40.jpg',
+      '/images/galeria-pb/foto-31.jpg',
+      '/images/galeria-pb/foto-32.jpg',
+      '/images/galeria-pb/foto-33.jpg',
+      '/images/galeria-pb/foto-34.jpg',
+      '/images/galeria-pb/foto-35.jpg',
+      '/images/galeria-pb/foto-36.jpg',
+      '/images/galeria-pb/foto-37.jpg',
+      '/images/galeria-pb/foto-38.jpg',
+      '/images/galeria-pb/foto-39.jpg',
+      '/images/galeria-pb/foto-40.jpg',
 
-      '//images/galeria-pb/foto-41.jpg',
-      '//images/galeria-pb/foto-42.jpg',
-      '//images/galeria-pb/foto-43.jpg',
-      '//images/galeria-pb/foto-44.jpg',
-      '//images/galeria-pb/foto-45.jpg',
-      '//images/galeria-pb/foto-46.jpg',
-      '//images/galeria-pb/foto-47.jpg',
-      '//images/galeria-pb/foto-48.jpg',
-      '//images/galeria-pb/foto-49.jpg',
-      '//images/galeria-pb/foto-50.jpg',
+      '/images/galeria-pb/foto-41.jpg',
+      '/images/galeria-pb/foto-42.jpg',
+      '/images/galeria-pb/foto-43.jpg',
+      '/images/galeria-pb/foto-44.jpg',
+      '/images/galeria-pb/foto-45.jpg',
+      '/images/galeria-pb/foto-46.jpg',
+      '/images/galeria-pb/foto-47.jpg',
+      '/images/galeria-pb/foto-48.jpg',
+      '/images/galeria-pb/foto-49.jpg',
+      '/images/galeria-pb/foto-50.jpg',
 
-      '//images/galeria-pb/foto-51.jpg',
-      '//images/galeria-pb/foto-52.jpg'
+      '/images/galeria-pb/foto-51.jpg',
+      '/images/galeria-pb/foto-52.jpg'
     ],
 
     credits: [
@@ -1650,17 +1650,17 @@ export const projects: Project[] = [
       'Editorial desenvolvido a partir da música MC Brinquedo vs Björk & Omar Souleyman — Pau na Crystalline.',
 
     hero:
-      '//images/cristal/foto1.jpg',
+      '/images/cristal/foto1.jpg',
 
     fieldImage:
-      '//images/cristal/foto2-2.jpg',
+      '/images/cristal/foto2-2.jpg',
 
     gallery: [
-      '//images/cristal/foto2-2.jpg',
-      '//images/cristal/foto3.jpg',
-      '//images/cristal/foto5.jpg',
-      '//images/cristal/foto4.jpg',
-      '//images/cristal/foto8.jpg'
+      '/images/cristal/foto2-2.jpg',
+      '/images/cristal/foto3.jpg',
+      '/images/cristal/foto5.jpg',
+      '/images/cristal/foto4.jpg',
+      '/images/cristal/foto8.jpg'
     ],
 
     credits: [
@@ -1740,16 +1740,16 @@ export const projects: Project[] = [
       'Exploração visual em moda construída a partir da ideia de sabores. Produzido para a revista acadêmica Dish.',
 
     hero:
-      '//images/palato/palato0.jpg',
+      '/images/palato/palato0.jpg',
 
     fieldImage:
-      '//images/palato/palato9.jpg',
+      '/images/palato/palato9.jpg',
 
     gallery: [
-      '//images/palato/palato1.jpg',
-      '//images/palato/palato4.jpg',
-      '//images/palato/palato5.jpg',
-      '//images/palato/palato9.jpg'
+      '/images/palato/palato1.jpg',
+      '/images/palato/palato4.jpg',
+      '/images/palato/palato5.jpg',
+      '/images/palato/palato9.jpg'
     ],
 
     credits: [
