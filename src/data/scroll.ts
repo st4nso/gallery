@@ -354,7 +354,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'video',
 
         src:
-          '/gallery/videos/scroll/caderno-processo.mp4',
+          '/ivideos/scroll/caderno-processo.mp4',
 
         label:
           'CADERNO DE PROCESSO',
@@ -377,7 +377,7 @@ O desenvolvimento de Scroll aconteceu de forma acumulativa. Moodboards, modelage
           'video',
 
         src:
-          '/gallery/videos/scroll/cartao-scroll-impressa.mp4',
+          '/ivideos/scroll/cartao-scroll-impressa.mp4',
 
         label:
           'CARTÕES DE VISITA ',
@@ -540,7 +540,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'video',
 
         src:
-          '/gallery/videos/scroll/folheando-plt.mp4',
+          '/ivideos/scroll/folheando-plt.mp4',
 
         label:
           'SCROLL / PLT / FOLHEAMENTO',
