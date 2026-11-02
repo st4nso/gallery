@@ -213,7 +213,7 @@ function getFieldImage(
 function getHref(
   slug: string
 ) {
-  return `/gallery/projetos/${slug}`;
+  return `/projetos/${slug}`;
 }
 ---
 
@@ -1528,7 +1528,7 @@ function getHref(
   <header class="site-header">
 
     <a
-      href="/gallery/campo"
+      href="/campo"
       class="site-brand"
     >
       STANSO
@@ -1540,17 +1540,17 @@ function getHref(
     >
 
       <a
-        href="/gallery/campo"
+        href="/campo"
         aria-current="page"
       >
         CAMPO
       </a>
 
-      <a href="/gallery/indice">
+      <a href="/indice">
         ÍNDICE
       </a>
 
-      <a href="/gallery/indice#sobre">
+      <a href="/indice#sobre">
         CONTATO
       </a>
 
@@ -1662,7 +1662,7 @@ function getHref(
                     ? (
 
                       <a
-                        href="/gallery/projetos/scroll"
+                        href="/projetos/scroll"
                         class="
                           field-card
                           field-card--scroll
@@ -1694,7 +1694,7 @@ function getHref(
                     ? (
 
                       <a
-                        href="/gallery/projetos/feed"
+                        href="/projetos/feed"
                         class="
                           field-card
                           field-card--feed
@@ -1813,24 +1813,19 @@ function getHref(
                             : (
 
                               <div class="field-fallback">
-                                <span>
-                                  {project.title}
-                                </span>
+                                <span>{project.title}</span>
                               </div>
 
                             )
                         }
 
                         <div class="field-caption">
-
                           <span class="field-title">
                             {project.title}
                           </span>
-
                           <span class="field-meta">
                             {project.year}
                           </span>
-
                         </div>
 
                       </a>
@@ -1846,587 +1841,9 @@ function getHref(
         )
       }
 
-
-      <!-- INSTAGRAM / DESKTOP -->
-
-
-      <a
-        class="
-          field-external-link
-          field-external-link--stanso
-        "
-        href="https://www.instagram.com/stanso__/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Abrir Instagram @stanso__ em nova aba"
-      >
-        <small>
-          INSTAGRAM ↗
-        </small>
-
-        <strong>
-          @stanso__
-        </strong>
-      </a>
-
-
-      <a
-        class="
-          field-external-link
-          field-external-link--scrollblog
-        "
-        href="https://www.instagram.com/scrollblog/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Abrir Instagram @scrollblog em nova aba"
-      >
-        <small>
-          INSTAGRAM ↗
-        </small>
-
-        <strong>
-          @scrollblog
-        </strong>
-      </a>
-
-
-      <!-- INSTAGRAM / MOBILE -->
-
-
-      <section
-        class="field-external-mobile"
-        aria-label="Links externos"
-      >
-
-        <div class="field-external-mobile-label">
-          FORA DO CAMPO
-        </div>
-
-        <div class="field-external-mobile-links">
-
-          <a
-            href="https://www.instagram.com/stanso__/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>
-              @stanso__
-            </span>
-
-            <span aria-hidden="true">
-              ↗
-            </span>
-          </a>
-
-          <a
-            href="https://www.instagram.com/scrollblog/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>
-              @scrollblog
-            </span>
-
-            <span aria-hidden="true">
-              ↗
-            </span>
-          </a>
-
-        </div>
-
-      </section>
-
-
     </div>
 
   </main>
-
-
-  <script is:inline>
-
-    /*
-    ======================================================
-    ARQUIVO P&B
-    ======================================================
-    */
-
-    document
-      .querySelectorAll(
-        '[data-random-hero="true"]'
-      )
-      .forEach(
-        function (item) {
-
-          var rawGallery =
-            item.getAttribute(
-              'data-gallery'
-            );
-
-          if (!rawGallery) {
-            return;
-          }
-
-          var gallery = [];
-
-          try {
-            gallery =
-              JSON.parse(
-                rawGallery
-              );
-          }
-          catch (error) {
-            return;
-          }
-
-          if (
-            !Array.isArray(gallery) ||
-            gallery.length === 0
-          ) {
-            return;
-          }
-
-          var image =
-            item.querySelector(
-              '.field-media img'
-            );
-
-          if (!image) {
-            return;
-          }
-
-          var index =
-            Math.floor(
-              Math.random() *
-              gallery.length
-            );
-
-          image.setAttribute(
-            'src',
-            gallery[index]
-          );
-
-        }
-      );
-
-
-    /*
-    ======================================================
-    PAN / DRAG
-    ======================================================
-    */
-
-    var viewport =
-      document.getElementById(
-        'field-viewport'
-      );
-
-    var stage =
-      document.getElementById(
-        'field-stage'
-      );
-
-    if (
-      viewport &&
-      stage
-    ) {
-
-      var stageWidth =
-        Number(
-          stage.getAttribute(
-            'data-stage-width'
-          )
-        )
-        ||
-        2900;
-
-      var stageHeight =
-        Number(
-          stage.getAttribute(
-            'data-stage-height'
-          )
-        )
-        ||
-        2000;
-
-      var cameraX = 0;
-      var cameraY = 0;
-
-      var dragging = false;
-
-      var pointerStartX = 0;
-      var pointerStartY = 0;
-
-      var cameraStartX = 0;
-      var cameraStartY = 0;
-
-      var initialized = false;
-
-
-      function isDesktop() {
-
-        return window.matchMedia(
-          '(min-width: 901px)'
-        ).matches;
-
-      }
-
-
-      function clampCamera() {
-
-        if (!isDesktop()) {
-          return;
-        }
-
-        var viewportWidth =
-          viewport.clientWidth;
-
-        var viewportHeight =
-          viewport.clientHeight;
-
-        var edge = 110;
-
-        var minX =
-          viewportWidth -
-          stageWidth -
-          edge;
-
-        var maxX =
-          edge;
-
-        var minY =
-          viewportHeight -
-          stageHeight -
-          edge;
-
-        var maxY =
-          edge;
-
-        cameraX =
-          Math.min(
-            maxX,
-            Math.max(
-              minX,
-              cameraX
-            )
-          );
-
-        cameraY =
-          Math.min(
-            maxY,
-            Math.max(
-              minY,
-              cameraY
-            )
-          );
-
-      }
-
-
-      function renderCamera() {
-
-        if (!isDesktop()) {
-
-          stage.style.transform =
-            'none';
-
-          return;
-
-        }
-
-        clampCamera();
-
-        stage.style.transform =
-          'translate3d(' +
-          cameraX +
-          'px,' +
-          cameraY +
-          'px,0)';
-
-      }
-
-
-      function centerOnScroll() {
-
-        if (!isDesktop()) {
-          return;
-        }
-
-        var scrollItem =
-          stage.querySelector(
-            '[data-slug="scroll"]'
-          );
-
-        if (!scrollItem) {
-          return;
-        }
-
-        var x =
-          Number(
-            scrollItem.getAttribute(
-              'data-x'
-            )
-          );
-
-        var y =
-          Number(
-            scrollItem.getAttribute(
-              'data-y'
-            )
-          );
-
-        var width =
-          Number(
-            scrollItem.getAttribute(
-              'data-w'
-            )
-          );
-
-        var height =
-          Number(
-            scrollItem.getAttribute(
-              'data-h'
-            )
-          );
-
-        cameraX =
-          viewport.clientWidth / 2 -
-          (
-            x +
-            width / 2
-          );
-
-        cameraY =
-          viewport.clientHeight / 2 -
-          (
-            y +
-            height / 2
-          );
-
-        renderCamera();
-
-      }
-
-
-      viewport.addEventListener(
-        'pointerdown',
-
-        function (event) {
-
-          if (!isDesktop()) {
-            return;
-          }
-
-          if (event.button !== 0) {
-            return;
-          }
-
-          /*
-          Links de projeto e Instagram nunca
-          iniciam o gesto de arrastar.
-          */
-
-          var interactive =
-            event.target.closest(
-              '.field-card, .field-external-link'
-            );
-
-          if (interactive) {
-            return;
-          }
-
-          dragging = true;
-
-          pointerStartX =
-            event.clientX;
-
-          pointerStartY =
-            event.clientY;
-
-          cameraStartX =
-            cameraX;
-
-          cameraStartY =
-            cameraY;
-
-          viewport.classList.add(
-            'is-dragging'
-          );
-
-          try {
-
-            viewport.setPointerCapture(
-              event.pointerId
-            );
-
-          }
-          catch (error) {
-          }
-
-        }
-      );
-
-
-      viewport.addEventListener(
-        'pointermove',
-
-        function (event) {
-
-          if (
-            !dragging ||
-            !isDesktop()
-          ) {
-            return;
-          }
-
-          cameraX =
-            cameraStartX +
-            (
-              event.clientX -
-              pointerStartX
-            );
-
-          cameraY =
-            cameraStartY +
-            (
-              event.clientY -
-              pointerStartY
-            );
-
-          renderCamera();
-
-        }
-      );
-
-
-      function endDrag(
-        event
-      ) {
-
-        if (!dragging) {
-          return;
-        }
-
-        dragging = false;
-
-        viewport.classList.remove(
-          'is-dragging'
-        );
-
-        try {
-
-          viewport.releasePointerCapture(
-            event.pointerId
-          );
-
-        }
-        catch (error) {
-        }
-
-      }
-
-
-      viewport.addEventListener(
-        'pointerup',
-        endDrag
-      );
-
-      viewport.addEventListener(
-        'pointercancel',
-        endDrag
-      );
-
-
-      viewport.addEventListener(
-        'wheel',
-
-        function (event) {
-
-          if (!isDesktop()) {
-            return;
-          }
-
-          event.preventDefault();
-
-          if (
-            event.shiftKey &&
-            Math.abs(
-              event.deltaX
-            ) < 1
-          ) {
-
-            cameraX -=
-              event.deltaY;
-
-          }
-          else {
-
-            cameraX -=
-              event.deltaX;
-
-            cameraY -=
-              event.deltaY;
-
-          }
-
-          renderCamera();
-
-        },
-
-        {
-          passive: false
-        }
-      );
-
-
-      window.addEventListener(
-        'resize',
-
-        function () {
-
-          if (!isDesktop()) {
-
-            stage.style.transform =
-              'none';
-
-            dragging = false;
-
-            viewport.classList.remove(
-              'is-dragging'
-            );
-
-            return;
-
-          }
-
-          if (!initialized) {
-
-            centerOnScroll();
-
-            initialized = true;
-
-          }
-          else {
-
-            renderCamera();
-
-          }
-
-        }
-      );
-
-
-      if (isDesktop()) {
-
-        centerOnScroll();
-
-        initialized = true;
-
-      }
-
-    }
-
-  </script>
-
 
 </body>
 
