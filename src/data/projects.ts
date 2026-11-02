@@ -235,7 +235,7 @@ export const projects: Project[] = [
       '/images/nomofobia/nomofobia-10.webp',
       '/images/nomofobia/nomofobia-11.jpg',
       '/images/nomofobia/nomofobia-12.jpg',
-      /images/nomofobia/nomofobia-13.jpg'
+      '/images/nomofobia/nomofobia-13.jpg'
     ],
 
     galleryLayout: [
