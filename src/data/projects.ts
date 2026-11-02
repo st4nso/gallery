@@ -384,7 +384,6 @@ export const projects: Project[] = [
 
     gallery: [
       '/images/plt/IMG_0119.jpg',
-      '/images/plt/IMG_0008_1.jpg',
       '/images/plt/IMG_0099.jpg',
       '/images/plt/IMG_0090.jpg',
       '/images/plt/IMG_0024.jpg',
