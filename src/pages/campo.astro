@@ -231,14 +231,21 @@ function getHref(slug: string) {
 
     .field-card--feed { padding: 9px; background: #080808; color: white; }
     .feed-ad-head { min-height: 30px; padding: 0 2px 8px; display: flex; align-items: center; justify-content: space-between; gap: 15px; color: rgba(255,255,255,.67); font-size: 8px; }
-    .field-card--feed .field-media { height: auto; background: white; }
-    .field-card--feed .field-media img, .field-card--feed .field-media video { width: 100%; height: auto; object-fit: contain; object-position: center; }
+    .feed-card--feed .field-media { height: auto; background: white; }
+    .feed-card--feed .field-media img, .feed-card--feed .field-media video { width: 100%; height: auto; object-fit: contain; object-position: center; }
     .feed-ad-foot { min-height: 39px; padding: 9px 2px 0; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 20px; }
     .feed-ad-title { font-size: 10px; font-weight: 600; }
     .feed-ad-cta { color: rgba(255,255,255,.68); font-size: 8px; }
 
     .field-fallback { width: 100%; min-height: 105px; padding: 12px; display: flex; align-items: flex-end; border: 1px solid var(--line); }
     .field-fallback span { font-size: clamp(17px,1.5vw,26px); line-height: .9; font-weight: 540; letter-spacing: -.04em; }
+
+    @media (max-width: 900px) {
+      body { overflow-y: auto; }
+      .field-viewport { position: relative; inset: auto; height: auto; overflow: visible; touch-action: pan-y; cursor: default; }
+      .field-stage { position: relative; width: 100%; height: auto; transform: none !important; padding: 40px 16px; }
+      .field-item { position: relative; left: auto !important; top: auto !important; width: 100% !important; margin-bottom: 80px; }
+    }
   </style>
 </head>
 <body>
@@ -277,8 +284,6 @@ function getHref(slug: string) {
             --object-position:${objectPosition};
             --z:${z};
           `;
-
-          const galleryData = project.randomHero ? JSON.stringify(project.gallery) : '';
 
           return (
             <article
@@ -342,5 +347,52 @@ function getHref(slug: string) {
     </div>
   </main>
 
+  <script>
+    // Script de navegação e arraste do campo infinito (Desktop)
+    const viewport = document.getElementById('field-viewport');
+    const stage = document.getElementById('field-stage');
+
+    if (viewport && stage && window.innerWidth > 900) {
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let posX = -200; // Posição inicial centrada opcional
+      let posY = -150;
+
+      const stageWidth = parseInt(stage.dataset.stageWidth || '2900');
+      const stageHeight = parseInt(stage.dataset.stageHeight || '2000');
+
+      function updateTransform() {
+        const maxLeft = window.innerWidth - 300;
+        const maxTop = window.innerHeight - 300;
+        
+        posX = Math.max(Math.min(posX, maxLeft), -stageWidth + 300);
+        posY = Math.max(Math.min(posY, maxTop), -stageHeight + 300);
+
+        stage.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+      }
+
+      updateTransform();
+
+      viewport.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        viewport.classList.add('is-dragging');
+        startX = e.clientX - posX;
+        startY = e.clientY - posY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        posX = e.clientX - startX;
+        posY = e.clientY - startY;
+        updateTransform();
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        viewport.classList.remove('is-dragging');
+      });
+    }
+  </script>
 </body>
-</html>npm
+</html>
