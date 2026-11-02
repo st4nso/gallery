@@ -518,7 +518,7 @@ Os quatro editoriais coexistem dentro desse sistema e utilizam a publicação co
           'image',
 
         src:
-          '//images/scroll/publicacao/story-nomofobia.jpg',
+          '/images/scroll/publicacao/story-nomofobia.jpg',
 
         alt:
           'Página de Nomofobia inspirada em linguagem de story'
